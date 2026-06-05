@@ -1,4 +1,10 @@
-import type { HistoryRow, SuggestResponse, BenchmarkResponse } from "../types";
+import type { BenchmarkResponse, HistoryRow, SuggestResponse } from "../types";
+
+const API_BASE = (import.meta.env.VITE_API_URL ?? "").replace(/\/$/, "");
+
+function apiUrl(path: string): string {
+  return API_BASE ? `${API_BASE}${path}` : path;
+}
 
 function parseErrorDetail(body: { detail?: string | { msg: string }[] }): string {
   const { detail } = body;
@@ -8,7 +14,7 @@ function parseErrorDetail(body: { detail?: string | { msg: string }[] }): string
 }
 
 export async function fetchSuggestion(history: HistoryRow[]): Promise<SuggestResponse> {
-  const response = await fetch("/api/suggest", {
+  const response = await fetch(apiUrl("/api/suggest"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ history, length: 5 }),
@@ -23,7 +29,7 @@ export async function fetchSuggestion(history: HistoryRow[]): Promise<SuggestRes
 }
 
 export async function fetchBenchmark(secret: string): Promise<BenchmarkResponse> {
-  const response = await fetch("/api/benchmark", {
+  const response = await fetch(apiUrl("/api/benchmark"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ secret, length: 5, max_guesses: 6 }),
