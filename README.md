@@ -6,11 +6,7 @@ Each guess is chosen to **maximize information** about the hidden word, not to g
 
 ## Architecture
 
-See [`diagram.d2`](diagram.d2) for a full component diagram. Render with:
-
-```bash
-d2 --layout elk diagram.d2 diagram.svg
-```
+See [`diagram.mmd`](diagram.mmd) for the architecture diagram (Mermaid). Preview at [mermaid.live](https://mermaid.live) or in VS Code with a Mermaid extension.
 
 ```
 data.py   → WordleWordsHandler   action space (dictionary)
@@ -169,7 +165,7 @@ while not done:
 ```
 Wordle/
 ├── lemario-general-del-espanol.txt
-├── diagram.d2
+├── diagram.mmd
 ├── pyproject.toml
 ├── Makefile
 ├── README.md
