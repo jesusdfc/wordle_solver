@@ -3,6 +3,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
+export PATH="$HOME/.local/bin:$PATH"
 export WORDLE_CACHE_DIR="${WORDLE_CACHE_DIR:-$ROOT/data/cache}"
 mkdir -p "$WORDLE_CACHE_DIR"
 

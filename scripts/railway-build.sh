@@ -12,7 +12,8 @@ mkdir -p "$ROOT/backend/static"
 cp -r "$ROOT/frontend/dist/." "$ROOT/backend/static/"
 
 echo "Installing Python dependencies..."
-pip install uv
+curl -LsSf https://astral.sh/uv/install.sh | sh
+export PATH="$HOME/.local/bin:$PATH"
 (cd "$ROOT/backend" && uv sync)
 
 echo "Railway build complete."
