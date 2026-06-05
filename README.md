@@ -1,15 +1,37 @@
 # palabra-solver
 
-Optimal theoretical player for [**La Palabra del Día**](https://lapalabradeldia.com/) (Spanish Wordle). Each guess is chosen to **maximize information** about the hidden word, not to guess the answer directly.
+Optimal theoretical player for [**La Palabra del Día**](https://lapalabradeldia.com/) (Spanish Wordle). The codebase is structured as a **POMDP**: a hidden secret word, partial observations (color feedback), and an agent that maintains a **belief state** over possible secrets.
 
-The solver treats Wordle as **hypothesis-space reduction**: maintain the set of possible secrets, pick the guess that partitions that set most informatively, then filter using the feedback pattern.
+Each guess is chosen to **maximize information** about the hidden word, not to guess the answer directly.
+
+## Architecture
+
+See [`diagram.d2`](diagram.d2) for a full component diagram. Render with:
+
+```bash
+d2 --layout elk diagram.d2 diagram.svg
+```
+
+```
+data.py   → WordleWordsHandler   action space (dictionary)
+env.py     → WordleEnv            environment (secret, step, reward)
+belief.py  → BeliefState          POMDP belief b(s) over secrets
+agent.py   → WordleAgent          policy π(b) → next guess
+```
+
+| Module | Class | RL role |
+|--------|-------|---------|
+| `data.py` | `WordleWordsHandler` | Action space / dictionary |
+| `env.py` | `WordleEnv` | Environment (hidden state + dynamics) |
+| `belief.py` | `BeliefState` | Belief over hidden state |
+| `agent.py` | `WordleAgent` | Policy (entropy / minimax) |
 
 ## Setup
 
 Requires [uv](https://docs.astral.sh/uv/).
 
 ```bash
-uv sync --dev
+uv sync --all-extras
 ```
 
 The default dictionary is `lemario-general-del-espanol.txt` at the project root (~87k Spanish lemmas from the RAE general lexicon).
@@ -30,147 +52,115 @@ uv run palabra suggest --guess audio02201
 
 CLI solve output uses ASCII feedback: `.` gray, `y` yellow, `g` green.
 
-Run tests:
+Run tests and lint:
 
 ```bash
 uv run pytest
+make checks
 ```
 
 ---
 
-## `words.py` — `WordleWordsHandler`
+## `data.py` — `WordleWordsHandler`
 
 Loads the raw dictionary and produces **playable Wordle words**.
-
-### What it does
 
 1. Reads one word per line from the `.txt` file.
 2. Keeps only entries of a given length (default **5** for classic mode).
 3. **Strips accents** (`abacá` → `abaca`) because classic mode ignores tildes.
-4. **Rejects** entries with spaces, hyphens, digits, or other symbols (`a-`, `ab aeterno`, `-able`).
-5. Keeps Spanish **ñ**.
-6. **Deduplicates** after normalization.
-
-### API
+4. **Rejects** entries with spaces, hyphens, digits, or other symbols.
+5. Keeps Spanish **ñ** and **deduplicates** after normalization.
 
 ```python
-from pathlib import Path
 from palabra_solver import WordleWordsHandler
 
 handler = WordleWordsHandler("lemario-general-del-espanol.txt", length=5)
-words = handler.load().words   # tuple[str, ...]
-len(handler)                   # number of valid words
-"abril" in handler             # membership check
+words = handler.load().words
 ```
-
-### Design notes
-
-- Returns an immutable `tuple` for fast reuse by the solver.
-- `normalize()` is exposed for unit tests and one-off checks.
-- The lemario is broader than the game's official word list; some valid solver guesses may not be accepted by the website.
 
 ---
 
-## `model.py` — entropy / minimax solver
+## `env.py` — `WordleEnv`
 
-Implements the **theoretical optimal player** using expected information gain.
+Stateful game simulator. Owns the **hidden secret** and the **observation function** (Wordle color rules).
 
-### Core idea
-
-Start with all possible secrets **W**. For each candidate guess **g**, simulate feedback against every word in **W** and group them into buckets. Pick **g** that makes those buckets as informative as possible.
-
-### Feedback (`feedback.py`)
-
-Wordle rules (including duplicate letters) are encoded as a base-3 integer:
-
-| Code | Color  |
-|------|--------|
-| 0    | Gray   |
-| 1    | Yellow |
-| 2    | Green  |
+| Method | RL concept |
+|--------|------------|
+| `reset(secret=...)` | Start episode, sample or fix secret |
+| `step(guess)` | Apply action → `(observation, reward, done, info)` |
+| `pattern(secret, guess)` | Transition / observation dynamics |
 
 ```python
-from palabra_solver import pattern, pattern_to_str
+from palabra_solver import WordleEnv
 
-pattern("abril", "abaca")   # int in [0, 243)
-pattern_to_str(value)       # "⬛🟨🟩⬛⬛" for debugging
+env = WordleEnv(words)
+env.reset(secret="abril")
+obs, reward, done, info = env.step("abaca")
+# info["pattern"] → base-3 feedback integer
 ```
 
-### Strategies
+Feedback codes: `GRAY=0`, `YELLOW=1`, `GREEN=2`. Reward: `+1` win, `-1` loss, `0` otherwise.
 
-| Strategy   | Rule                         | Use case                          |
-|------------|------------------------------|-----------------------------------|
-| `entropy`  | `argmax H(g)`                | Default; best average performance |
-| `minimax`  | `argmin max \|bucket\|`      | Conservative; avoids worst cases  |
+---
+
+## `belief.py` — `BeliefState`
+
+Tracks the agent's **posterior** over possible secrets. After each observation, inconsistent words are removed.
 
 ```python
-from palabra_solver import Solver, Strategy
+from palabra_solver import BeliefState
 
-words = handler.words
-solver = Solver(words, strategy=Strategy.ENTROPY)
-
-guess = solver.suggest()
-solver.update(guess, feedback_pattern)
-
-# Offline simulation
-guesses = solver.solve("abril")
+belief = BeliefState(words)
+belief.update("abaca", feedback_pattern)
+print(belief.candidates)   # remaining secrets
+print(belief.is_solved())  # True when one candidate left
 ```
 
-### Algorithm loop
+This is the standard POMDP **belief state** `b(s)`: a uniform distribution over the remaining candidate set.
+
+---
+
+## `agent.py` — `WordleAgent`
+
+Policy that maps belief → action. Implements two strategies:
+
+| Strategy | Rule | Use case |
+|----------|------|----------|
+| `entropy` | `argmax H(g)` | Default; best average performance |
+| `minimax` | `argmin max \|bucket\|` | Conservative; avoids worst cases |
+
+```python
+from palabra_solver import WordleAgent, Strategy
+
+agent = WordleAgent(words, strategy=Strategy.ENTROPY)
+guess = agent.suggest()
+agent.update(guess, feedback_pattern)
+
+# Full offline episode
+guesses = agent.solve("abril")
+```
+
+### Episode loop
 
 ```
-W ← all valid words
-while not solved:
-    g ← best_guess(W)           # max entropy or min worst-case
-    p ← feedback(secret, g)
-    W ← { w ∈ W : pattern(w, g) = p }
+env.reset(secret)
+belief.reset()
+while not done:
+    action ← agent.suggest()          # policy π(b)
+    obs, reward, done ← env.step(action)
+    belief.update(action, pattern)    # filter hypothesis space
 ```
-
-This is **Bayesian optimal experimental design** without learning: pure combinatorics over the remaining hypothesis space.
 
 ---
 
 ## How to make it better
 
-### 1. Word-frequency priors
-
-Weight secrets by corpus frequency (e.g. SUBTLEX-ESP). Replace uniform `P(p)` with:
-
-```
-P(p | g) = Σ_{w ∈ bucket_p} P(w)
-```
-
-Common daily words get higher prior probability; the solver becomes more realistic.
-
-### 2. Separate solution and guess sets
-
-- **W** (solutions): ~2k common words — what the game picks.
-- **G** (guesses): full dictionary — allowed guesses including rare words.
-
-Using **G** for guessing while filtering **W** improves opening moves.
-
-### 3. Hard mode
-
-Enforce that greens stay in place and yellow letters reappear in later guesses. Restricts the guess pool each turn.
-
-### 4. Performance
-
-- Cache `pattern(a, b)` with `functools.lru_cache`.
-- Precompute opening guess offline.
-- Use Numba for partition + entropy over large word lists.
-
-### 5. Benchmark suite
-
-Simulate all secrets; report mean / median / p95 guesses. Compare `entropy` vs `minimax` vs fixed openings (`audio`, `orase`).
-
-### 6. Other game modes
-
-- **Tildes**: `WordleWordsHandler(..., preserve_accents=True, length=6)`.
-- **Variable length**: parameterize `length` (already supported).
-
-### 7. Neural guidance (advanced)
-
-Train a model to imitate `argmax_entropy` as a fast heuristic, using the theoretical solver as an oracle — similar in spirit to AlphaZero-style search with a learned policy.
+1. **Word-frequency priors** — weight secrets by corpus frequency (SUBTLEX-ESP).
+2. **Separate solution / guess sets** — common words for secrets, full dictionary for guesses.
+3. **Hard mode** — constrain actions to reuse yellow/green letters.
+4. **Performance** — cache `pattern()`, precompute opening guess, Numba for entropy.
+5. **Benchmark suite** — simulate all secrets; report mean / median / p95 guesses.
+6. **Neural policy** — train a network to imitate `WordleAgent.suggest()` as a fast heuristic.
 
 ---
 
@@ -179,12 +169,15 @@ Train a model to imitate `argmax_entropy` as a fast heuristic, using the theoret
 ```
 Wordle/
 ├── lemario-general-del-espanol.txt
+├── diagram.d2
 ├── pyproject.toml
+├── Makefile
 ├── README.md
 ├── src/palabra_solver/
-│   ├── words.py       # WordleWordsHandler
-│   ├── feedback.py    # pattern encoding
-│   ├── model.py       # Solver, entropy, minimax
+│   ├── data.py        # WordleWordsHandler
+│   ├── env.py         # WordleEnv
+│   ├── belief.py      # BeliefState
+│   ├── agent.py       # WordleAgent
 │   └── cli.py         # palabra command
 └── tests/
     ├── test_words.py

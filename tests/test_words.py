@@ -2,9 +2,10 @@ from pathlib import Path
 
 import pytest
 
-from palabra_solver.feedback import GRAY, GREEN, YELLOW, pattern
-from palabra_solver.model import Solver, Strategy, best_guess, expected_entropy, partition
-from palabra_solver.words import WordleWordsHandler
+from palabra_solver.agent import Strategy, WordleAgent
+from palabra_solver.belief import BeliefState
+from palabra_solver.data import WordleWordsHandler
+from palabra_solver.env import WordleEnv
 
 LEMARIO = Path(__file__).resolve().parents[1] / "lemario-general-del-espanol.txt"
 
@@ -42,39 +43,80 @@ class TestWordleWordsHandler:
         assert "abaca" in words or "abajo" in words
 
 
-class TestFeedback:
+class TestWordleEnv:
     def test_all_green(self) -> None:
-        assert pattern("abaca", "abaca") == sum(GREEN * (3**i) for i in range(5))
+        assert WordleEnv.pattern("abaca", "abaca") == sum(
+            WordleEnv.GREEN * (3**i) for i in range(5)
+        )
 
     def test_duplicate_letters(self) -> None:
-        # Two a's in the secret: only two a's in the guess can be marked non-gray.
         secret = "aabbc"
         guess = "aaaab"
-        value = pattern(secret, guess)
+        value = WordleEnv.pattern(secret, guess)
         codes = [(value // (3**index)) % 3 for index in range(5)]
-        assert codes == [GREEN, GREEN, GRAY, GRAY, YELLOW]
+        assert codes == [
+            WordleEnv.GREEN,
+            WordleEnv.GREEN,
+            WordleEnv.GRAY,
+            WordleEnv.GRAY,
+            WordleEnv.YELLOW,
+        ]
+
+    def test_reset_and_step(self) -> None:
+        words = ("abaca", "abajo", "abril")
+        env = WordleEnv(words)
+        obs = env.reset(secret="abril")
+        assert obs.turn == 0
+        assert obs.guesses == ()
+
+        obs, reward, done, info = env.step("abaca")
+        assert obs.turn == 1
+        assert obs.guesses == ("abaca",)
+        assert info["pattern"] == WordleEnv.pattern("abril", "abaca")
+        assert reward == 0.0
+        assert done is False
+
+    def test_step_wins(self) -> None:
+        env = WordleEnv(("abril",))
+        env.reset(secret="abril")
+        _, reward, done, info = env.step("abril")
+        assert reward == 1.0
+        assert done is True
+        assert info["won"] is True
 
 
-class TestModel:
+class TestBeliefState:
+    def test_update_filters_candidates(self) -> None:
+        belief = BeliefState(("abaca", "abajo", "abril"))
+        pattern = WordleEnv.pattern("abril", "abaca")
+        belief.update("abaca", pattern)
+        assert belief.candidates == ("abril",)
+
+    def test_is_solved(self) -> None:
+        belief = BeliefState(("abril",))
+        assert belief.is_solved() is True
+
+
+class TestWordleAgent:
     def test_partition_groups_candidates(self) -> None:
         candidates = ("abaca", "abajo", "abano")
-        buckets = partition(candidates, "abaca")
+        buckets = WordleAgent.partition(candidates, "abaca")
         assert sum(len(bucket) for bucket in buckets.values()) == len(candidates)
 
     def test_expected_entropy_is_zero_for_single_candidate(self) -> None:
-        assert expected_entropy("abaca", ("abaca",)) == 0.0
+        assert WordleAgent.expected_entropy("abaca", ("abaca",)) == 0.0
 
     def test_best_guess_returns_only_candidate(self) -> None:
-        assert best_guess(("abaca",)) == "abaca"
+        assert WordleAgent.best_guess(("abaca",)) == "abaca"
 
-    def test_solver_solves_simple_secret(self) -> None:
+    def test_agent_solves_simple_secret(self) -> None:
         words = ("abaca", "abajo", "abano", "abril", "abono")
-        solver = Solver(words)
-        guesses = solver.solve("abril", max_guesses=6)
+        agent = WordleAgent(words)
+        guesses = agent.solve("abril", max_guesses=6)
         assert guesses[-1] == "abril"
         assert len(guesses) <= 6
 
     def test_minimax_prefers_balanced_split(self) -> None:
         candidates = ("abcaa", "abcbb", "abccc")
-        guess = best_guess(candidates, candidates, strategy=Strategy.MINIMAX)
+        guess = WordleAgent.best_guess(candidates, candidates, strategy=Strategy.MINIMAX)
         assert guess in candidates

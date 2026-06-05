@@ -5,9 +5,9 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from palabra_solver.feedback import pattern, pattern_to_str
-from palabra_solver.model import Solver, Strategy
-from palabra_solver.words import WordleWordsHandler
+from palabra_solver.agent import Strategy, WordleAgent
+from palabra_solver.data import WordleWordsHandler
+from palabra_solver.env import WordleEnv
 
 DEFAULT_LEMARIO = Path(__file__).resolve().parents[2] / "lemario-general-del-espanol.txt"
 
@@ -28,7 +28,7 @@ def cmd_stats(args: argparse.Namespace) -> int:
 
 def cmd_suggest(args: argparse.Namespace) -> int:
     words = _load_words(args.dictionary, args.length)
-    solver = Solver(words, strategy=Strategy(args.strategy))
+    agent = WordleAgent(words, strategy=Strategy(args.strategy))
 
     for guess_feedback in args.guess:
         if len(guess_feedback) != args.length + 1:
@@ -43,26 +43,26 @@ def cmd_suggest(args: argparse.Namespace) -> int:
         feedback_pattern = 0
         for index, digit in enumerate(pattern_str):
             feedback_pattern += int(digit) * (3**index)
-        solver.update(guess, feedback_pattern)
+        agent.update(guess, feedback_pattern)
 
-    suggestion = solver.suggest()
-    remaining = len(solver.candidates)
+    suggestion = agent.suggest()
+    remaining = len(agent.candidates)
     print(f"Suggested guess: {suggestion}")
     print(f"Remaining candidates: {remaining}")
     if remaining <= args.show:
-        print("Candidates:", ", ".join(solver.candidates))
+        print("Candidates:", ", ".join(agent.candidates))
     return 0
 
 
 def cmd_solve(args: argparse.Namespace) -> int:
     words = _load_words(args.dictionary, args.length)
-    solver = Solver(words, strategy=Strategy(args.strategy))
-    guesses = solver.solve(args.secret.lower(), max_guesses=args.max_guesses)
+    agent = WordleAgent(words, strategy=Strategy(args.strategy))
+    guesses = agent.solve(args.secret.lower(), max_guesses=args.max_guesses)
 
     print(f"Secret: {args.secret.lower()}")
     for index, guess in enumerate(guesses, start=1):
-        feedback = pattern_to_str(
-            pattern(args.secret.lower(), guess),
+        feedback = WordleEnv.pattern_to_str(
+            WordleEnv.pattern(args.secret.lower(), guess),
             length=args.length,
             use_emoji=False,
         )
