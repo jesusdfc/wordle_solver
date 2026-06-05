@@ -7,17 +7,18 @@ from pathlib import Path
 
 from solver import default_dictionary_path
 from solver.agent import WordleAgent
-from solver.data import WordleWordsHandler
+from solver.data import TableLookupPersistor
 from solver.env import WordleEnv
 from solver.model import Strategy, WordleModel
 
 
-def _load_words(path: Path, length: int) -> tuple[str, ...]:
-    return WordleWordsHandler(path, length=length).load().words
+def _load_pattern_table(path: Path, length: int):
+    return TableLookupPersistor(path, length=length).load()
 
 
 def cmd_stats(args: argparse.Namespace) -> int:
-    words = _load_words(args.dictionary, args.length)
+    table = _load_pattern_table(args.dictionary, args.length)
+    words = table.words
     print(f"Dictionary: {args.dictionary}")
     print(f"Length: {args.length}")
     print(f"Valid words: {len(words)}")
@@ -27,8 +28,12 @@ def cmd_stats(args: argparse.Namespace) -> int:
 
 
 def cmd_suggest(args: argparse.Namespace) -> int:
-    words = _load_words(args.dictionary, args.length)
-    agent = WordleAgent(words, model=WordleModel(strategy=Strategy(args.strategy)))
+    table = _load_pattern_table(args.dictionary, args.length)
+    agent = WordleAgent(
+        table.words,
+        model=WordleModel(strategy=Strategy(args.strategy), pattern_table=table),
+        pattern_table=table,
+    )
 
     for guess_feedback in args.guess:
         if len(guess_feedback) != args.length + 1:
@@ -55,14 +60,18 @@ def cmd_suggest(args: argparse.Namespace) -> int:
 
 
 def cmd_solve(args: argparse.Namespace) -> int:
-    words = _load_words(args.dictionary, args.length)
-    agent = WordleAgent(words, model=WordleModel(strategy=Strategy(args.strategy)))
+    table = _load_pattern_table(args.dictionary, args.length)
+    agent = WordleAgent(
+        table.words,
+        model=WordleModel(strategy=Strategy(args.strategy), pattern_table=table),
+        pattern_table=table,
+    )
     guesses = agent.solve(args.secret.lower(), max_guesses=args.max_guesses)
 
     print(f"Secret: {args.secret.lower()}")
     for index, guess in enumerate(guesses, start=1):
         feedback = WordleEnv.pattern_to_str(
-            WordleEnv.pattern(args.secret.lower(), guess),
+            table.pattern(args.secret.lower(), guess),
             length=args.length,
             use_emoji=False,
         )

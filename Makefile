@@ -9,7 +9,7 @@ test:
 	cd solver && uv run pytest -q
 
 backend:
-	cd backend && uv run uvicorn app.main:app --reload --port 8000
+	cd backend && uv run uvicorn app.main:app --reload --port 9000
 
 frontend:
 	cd frontend && npm run dev

@@ -11,3 +11,5 @@ build/
 uv.lock
 solver/uv.lock
 backend/uv.lock
+words_*.pickle
+word_*_dict.pickle

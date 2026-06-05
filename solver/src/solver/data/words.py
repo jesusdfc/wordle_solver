@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import pickle
 import re
 import unicodedata
 from collections.abc import Callable, Iterator
@@ -51,15 +52,43 @@ class WordleWordsHandler:
             return None
         return normalized
 
-    def load(self) -> WordleWordsHandler:
-        """Read the dictionary file and populate the word list."""
+    def cache_path(self) -> Path:
+        """Path to the pickled word list for this dictionary and length."""
+        return self.path.parent / f"words_{self.length}.pickle"
+
+    def _load_from_source(self) -> tuple[str, ...]:
         seen: dict[str, None] = {}
         with self.path.open(encoding=self.encoding) as handle:
             for line in handle:
                 word = self.normalize(line, length=self.length)
                 if word is not None:
                     seen.setdefault(word, None)
-        self._words = tuple(seen.keys())
+        return tuple(seen.keys())
+
+    def _load_from_cache(self) -> tuple[str, ...] | None:
+        cache = self.cache_path()
+        if not cache.is_file() or not self.path.is_file():
+            return None
+        if cache.stat().st_mtime < self.path.stat().st_mtime:
+            return None
+        with cache.open("rb") as handle:
+            words = pickle.load(handle)
+        if not isinstance(words, tuple) or not all(isinstance(word, str) for word in words):
+            return None
+        return words
+
+    def _save_cache(self, words: tuple[str, ...]) -> None:
+        with self.cache_path().open("wb") as handle:
+            pickle.dump(words, handle)
+
+    def load(self) -> WordleWordsHandler:
+        """Read the dictionary file and populate the word list."""
+        cached = self._load_from_cache()
+        if cached is not None:
+            self._words = cached
+        else:
+            self._words = self._load_from_source()
+            self._save_cache(self._words)
         self._loaded = True
         return self
 

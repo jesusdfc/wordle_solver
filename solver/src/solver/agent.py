@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections.abc import Sequence
 
 from solver.belief import BeliefState
+from solver.data import PatternTable
 from solver.env import WordleEnv
 from solver.model import Strategy, WordleModel
 
@@ -19,14 +20,16 @@ class WordleAgent:
         *,
         model: WordleModel | None = None,
         strategy: Strategy = Strategy.ENTROPY,
+        pattern_table: PatternTable | None = None,
     ) -> None:
         if not all_words:
             raise ValueError("all_words must not be empty")
 
         self.all_words = tuple(all_words)
-        self.model = model or WordleModel(strategy=strategy)
+        self.pattern_table = pattern_table
+        self.model = model or WordleModel(strategy=strategy, pattern_table=pattern_table)
         initial = solution_words if solution_words is not None else all_words
-        self.belief = BeliefState(initial)
+        self.belief = BeliefState(initial, pattern_table=pattern_table)
 
     @property
     def candidates(self) -> tuple[str, ...]:

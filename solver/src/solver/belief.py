@@ -4,17 +4,29 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 
+from solver.data import PatternTable
 from solver.env import WordleEnv
 
 
 class BeliefState:
     """Posterior over possible secrets given observation history."""
 
-    def __init__(self, candidates: Sequence[str]) -> None:
+    def __init__(
+        self,
+        candidates: Sequence[str],
+        *,
+        pattern_table: PatternTable | None = None,
+    ) -> None:
         if not candidates:
             raise ValueError("candidates must not be empty")
+        self.pattern_table = pattern_table
         self._initial = tuple(candidates)
         self._candidates = self._initial
+
+    def _pattern(self, secret: str, guess: str) -> int:
+        if self.pattern_table is not None:
+            return self.pattern_table.pattern(secret, guess)
+        return WordleEnv.pattern(secret, guess)
 
     @property
     def candidates(self) -> tuple[str, ...]:
@@ -33,7 +45,7 @@ class BeliefState:
         self._candidates = tuple(
             candidate
             for candidate in self._candidates
-            if WordleEnv.pattern(candidate, guess) == feedback_pattern
+            if self._pattern(candidate, guess) == feedback_pattern
         )
 
     def is_solved(self) -> bool:

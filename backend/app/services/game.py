@@ -2,22 +2,26 @@ from __future__ import annotations
 
 from solver import default_dictionary_path
 from solver.agent import WordleAgent
-from solver.data import WordleWordsHandler
+from solver.data import PatternTable, TableLookupPersistor
 from solver.env import WordleEnv
 from solver.model import Strategy, WordleModel
 
 from app.schemas import HistoryRow, SuggestResponse
 
-_words_cache: dict[int, tuple[str, ...]] = {}
+_table_cache: dict[int, PatternTable] = {}
+
+
+def get_pattern_table(length: int = 5) -> PatternTable:
+    if length not in _table_cache:
+        _table_cache[length] = TableLookupPersistor(
+            default_dictionary_path(),
+            length=length,
+        ).load()
+    return _table_cache[length]
 
 
 def get_words(length: int = 5) -> tuple[str, ...]:
-    if length not in _words_cache:
-        _words_cache[length] = WordleWordsHandler(
-            default_dictionary_path(),
-            length=length,
-        ).load().words
-    return _words_cache[length]
+    return get_pattern_table(length).words
 
 
 def suggest(
@@ -27,9 +31,9 @@ def suggest(
     length: int = 5,
     max_candidates: int = 20,
 ) -> SuggestResponse:
-    words = get_words(length)
-    model = WordleModel(strategy=Strategy(strategy))
-    agent = WordleAgent(words, model=model)
+    table = get_pattern_table(length)
+    model = WordleModel(strategy=Strategy(strategy), pattern_table=table)
+    agent = WordleAgent(table.words, model=model, pattern_table=table)
 
     for row in history:
         if len(row.word) != length or len(row.pattern) != length:
