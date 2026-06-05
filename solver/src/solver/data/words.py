@@ -8,6 +8,8 @@ import unicodedata
 from collections.abc import Callable, Iterator
 from pathlib import Path
 
+from solver.data.cache import get_cache_dir
+
 _DISALLOWED_RE = re.compile(r"[\s\-0-9'\".,;:/\\()[\]{}]")
 _VALID_CHARS_RE = re.compile(r"^[a-zñ]+$")
 
@@ -54,7 +56,7 @@ class WordleWordsHandler:
 
     def cache_path(self) -> Path:
         """Path to the pickled word list for this dictionary and length."""
-        return self.path.parent / f"words_{self.length}.pickle"
+        return get_cache_dir(self.path.parent) / f"words_{self.length}.pickle"
 
     def _load_from_source(self) -> tuple[str, ...]:
         seen: dict[str, None] = {}

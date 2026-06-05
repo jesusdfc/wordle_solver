@@ -6,6 +6,7 @@ import pickle
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from solver.data.cache import get_cache_dir
 from solver.data.words import WordleWordsHandler
 from solver.env import WordleEnv
 
@@ -61,7 +62,9 @@ class TableLookupPersistor:
     ) -> None:
         self.dictionary_path = Path(dictionary_path)
         self.length = length
-        self.data_dir = Path(data_dir) if data_dir is not None else self.dictionary_path.parent
+        self.data_dir = (
+            Path(data_dir) if data_dir is not None else get_cache_dir(self.dictionary_path.parent)
+        )
 
     def cache_path(self) -> Path:
         """Path to the cached pattern table for this word length."""

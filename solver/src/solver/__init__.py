@@ -4,7 +4,7 @@ from pathlib import Path
 
 from solver.agent import WordleAgent
 from solver.belief import BeliefState
-from solver.data import PatternTable, TableLookupPersistor, WordleWordsHandler
+from solver.data import PatternTable, TableLookupPersistor, WordleWordsHandler, get_cache_dir
 from solver.env import WordleEnv, WordleObservation
 from solver.model import WordleModel
 
@@ -19,6 +19,7 @@ __all__ = [
     "WordleWordsHandler",
     "default_data_dir",
     "default_dictionary_path",
+    "get_cache_dir",
 ]
 
 

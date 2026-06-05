@@ -59,35 +59,48 @@ Word list: [`lemario-general-del-espanol.txt`](https://github.com/olea/lemarios/
 
 Bundled copy: `data/lemario-general-del-espanol.txt`.
 
-## Deploy
+## Deploy (Railway — recommended)
 
-The UI and API are split: **Netlify** serves the static frontend; the **Python API** must run elsewhere (e.g. [Render](https://render.com)).
+Single service: FastAPI serves the built React UI and `/api/*` from one URL. No Netlify or split CORS setup required.
 
-### 1. API (Render)
+### 1. Railway
 
 1. Push this repo to GitHub.
-2. [Render](https://render.com) → **New Blueprint** → connect the repo (uses [`render.yaml`](render.yaml)).
-3. Set **`CORS_ORIGINS`** to your Netlify URL, e.g. `https://your-app.netlify.app`.
-4. Note the API URL, e.g. `https://palabra-api.onrender.com`.
+2. [Railway](https://railway.app) → **New Project** → **Deploy from GitHub** → select the repo.
+3. Railway reads [`railway.toml`](railway.toml) and [`nixpacks.toml`](nixpacks.toml).
+4. **Volume (recommended):** Service → **Volumes** → mount at **`/app/data/cache`**  
+   Set env **`WORDLE_CACHE_DIR=/app/data/cache`**.  
+   Persists pickles across deploys; lemario stays in the image at `data/lemario-general-del-espanol.txt`.
+5. **Environment variables**:
 
-The build step pre-warms the pattern cache so the first request is fast.
+   | Variable | Value |
+   |----------|--------|
+   | `WORDLE_CACHE_DIR` | `/app/data/cache` (when using a volume) |
+   | `CORS_ORIGINS` | Leave empty for same-origin Railway deploy |
 
-### 2. Frontend (Netlify)
+   Do **not** set `VITE_API_URL` on Railway — the UI calls `/api` on the same host.
 
-1. Netlify → **Add new site** → Import from Git.
-2. Build settings are read from [`netlify.toml`](netlify.toml).
-3. Set environment variable:
-   - **`VITE_API_URL`** = your Render API origin (no trailing slash), e.g. `https://palabra-api.onrender.com`
-4. Deploy.
+6. Deploy. Open the generated public URL (e.g. `https://wordle-solver-production.up.railway.app`).
+7. Verify: `/api/health` → `{"status":"ok"}`, `/` → app menu.
 
-Local dev leaves `VITE_API_URL` empty; Vite proxies `/api` to `127.0.0.1:9000`.
+**Cost:** Railway Hobby plan (~$5/month) for always-on + volume.
+
+Build runs `scripts/railway-build.sh` (npm build + copy to `backend/static` + `uv sync`).  
+Start runs `scripts/railway-start.sh` (warm cache + uvicorn).
+
+### Alternative: Netlify + Render (split)
+
+See [`netlify.toml`](netlify.toml) and [`render.yaml`](render.yaml). Set `VITE_API_URL` on Netlify and `CORS_ORIGINS` on Render.
+
+Local dev: `./init.sh` or frontend + backend separately; leave `VITE_API_URL` empty.
 
 ### Environment variables
 
 | Variable | Where | Purpose |
 |----------|--------|---------|
-| `VITE_API_URL` | Netlify | Production API base URL |
-| `CORS_ORIGINS` | Render / backend | Comma-separated allowed browser origins |
+| `WORDLE_CACHE_DIR` | Railway | Pickle cache dir (e.g. `/app/data/cache` on a volume) |
+| `VITE_API_URL` | Netlify only | Split-deploy API base URL |
+| `CORS_ORIGINS` | Railway / Render | Extra allowed origins (comma-separated) |
 
 See [`frontend/.env.example`](frontend/.env.example) and [`backend/.env.example`](backend/.env.example).
 
