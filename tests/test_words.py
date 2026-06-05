@@ -10,6 +10,10 @@ LEMARIO = Path(__file__).resolve().parents[1] / "lemario-general-del-espanol.txt
 
 
 class TestWordleWordsHandler:
+    def test_strip_accents(self) -> None:
+        assert WordleWordsHandler.strip_accents("abacá") == "abaca"
+        assert WordleWordsHandler.strip_accents("Ábaco") == "Abaco"
+
     def test_normalize_strips_accents(self) -> None:
         assert WordleWordsHandler.normalize("abacá", length=5) == "abaca"
         assert WordleWordsHandler.normalize("Ábaco", length=5) == "abaco"

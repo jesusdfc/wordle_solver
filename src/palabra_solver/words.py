@@ -11,11 +11,6 @@ _DISALLOWED_RE = re.compile(r"[\s\-0-9'\".,;:/\\()[\]{}]")
 _VALID_CHARS_RE = re.compile(r"^[a-zñ]+$")
 
 
-def _strip_accents(text: str) -> str:
-    decomposed = unicodedata.normalize("NFD", text)
-    return "".join(char for char in decomposed if unicodedata.category(char) != "Mn")
-
-
 class WordleWordsHandler:
     """Load a dictionary file and expose normalized Wordle-ready words."""
 
@@ -33,6 +28,12 @@ class WordleWordsHandler:
         self._loaded = False
 
     @staticmethod
+    def strip_accents(text: str) -> str:
+        """Remove diacritics from text (e.g. abacá → abaca)."""
+        decomposed = unicodedata.normalize("NFD", text)
+        return "".join(char for char in decomposed if unicodedata.category(char) != "Mn")
+
+    @staticmethod
     def normalize(raw: str, *, length: int | None = None) -> str | None:
         """Return a normalized word or None if the entry is not playable."""
         text = raw.strip().lower()
@@ -43,7 +44,7 @@ class WordleWordsHandler:
         if not all(char.isalpha() for char in text):
             return None
 
-        normalized = _strip_accents(text)
+        normalized = WordleWordsHandler.strip_accents(text)
         if not _VALID_CHARS_RE.fullmatch(normalized):
             return None
         if length is not None and len(normalized) != length:
