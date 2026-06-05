@@ -9,7 +9,7 @@ from solver import default_dictionary_path
 from solver.agent import WordleAgent
 from solver.data import TableLookupPersistor
 from solver.env import WordleEnv
-from solver.model import Strategy, WordleModel
+from solver.model import WordleModel
 
 
 def _load_pattern_table(path: Path, length: int):
@@ -31,7 +31,7 @@ def cmd_suggest(args: argparse.Namespace) -> int:
     table = _load_pattern_table(args.dictionary, args.length)
     agent = WordleAgent(
         table.words,
-        model=WordleModel(strategy=Strategy(args.strategy), pattern_table=table),
+        model=WordleModel(pattern_table=table),
         pattern_table=table,
     )
 
@@ -63,7 +63,7 @@ def cmd_solve(args: argparse.Namespace) -> int:
     table = _load_pattern_table(args.dictionary, args.length)
     agent = WordleAgent(
         table.words,
-        model=WordleModel(strategy=Strategy(args.strategy), pattern_table=table),
+        model=WordleModel(pattern_table=table),
         pattern_table=table,
     )
     guesses = agent.solve(args.secret.lower(), max_guesses=args.max_guesses)
@@ -124,17 +124,11 @@ def build_parser() -> argparse.ArgumentParser:
         description=(
             "Interactive assistant for an in-progress game. Pass each previous guess "
             "with its color pattern; the solver filters possible secrets and returns "
-            "the guess that maximizes information (entropy or minimax).\n\n"
+            "the guess that maximizes expected entropy.\n\n"
             "Pattern digits are base-3 per position: 0=gray, 1=yellow, 2=green. "
             "Example for a 5-letter word: audio02201 means audio with g g . y ."
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
-    )
-    suggest.add_argument(
-        "--strategy",
-        choices=[strategy.value for strategy in Strategy],
-        default=Strategy.ENTROPY.value,
-        help="entropy: maximize expected information; minimax: minimize worst-case bucket size",
     )
     suggest.add_argument(
         "--guess",
@@ -161,12 +155,6 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     solve.add_argument("secret", help="Secret word to solve (must be in the dictionary)")
-    solve.add_argument(
-        "--strategy",
-        choices=[strategy.value for strategy in Strategy],
-        default=Strategy.ENTROPY.value,
-        help="entropy: maximize expected information; minimax: minimize worst-case bucket size",
-    )
     solve.add_argument(
         "--max-guesses",
         type=int,

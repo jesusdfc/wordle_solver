@@ -8,7 +8,7 @@ from solver.agent import WordleAgent
 from solver.belief import BeliefState
 from solver.data import TableLookupPersistor, WordleWordsHandler
 from solver.env import WordleEnv
-from solver.model import Strategy, WordleModel
+from solver.model import WordleModel
 
 LEMARIO = default_dictionary_path()
 
@@ -126,12 +126,6 @@ class TestWordleModel:
     def test_best_guess_returns_only_candidate(self) -> None:
         model = WordleModel()
         assert model.best_guess(("abaca",)) == "abaca"
-
-    def test_minimax_prefers_balanced_split(self) -> None:
-        candidates = ("abcaa", "abcbb", "abccc")
-        model = WordleModel(strategy=Strategy.MINIMAX)
-        guess = model.best_guess(candidates, candidates)
-        assert guess in candidates
 
 
 class TestWordleAgent:

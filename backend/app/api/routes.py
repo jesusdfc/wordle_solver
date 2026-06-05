@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 
-from app.schemas import SuggestRequest, SuggestResponse
-from app.services.game import suggest
+from app.schemas import BenchmarkRequest, BenchmarkResponse, SuggestRequest, SuggestResponse
+from app.services.game import benchmark, suggest
 
 router = APIRouter()
 
@@ -16,8 +16,19 @@ def suggest_next(request: SuggestRequest) -> SuggestResponse:
     try:
         return suggest(
             request.history,
-            strategy=request.strategy,
             length=request.length,
+        )
+    except ValueError as error:
+        raise HTTPException(status_code=400, detail=str(error)) from error
+
+
+@router.post("/benchmark", response_model=BenchmarkResponse)
+def run_benchmark(request: BenchmarkRequest) -> BenchmarkResponse:
+    try:
+        return benchmark(
+            request.secret,
+            length=request.length,
+            max_guesses=request.max_guesses,
         )
     except ValueError as error:
         raise HTTPException(status_code=400, detail=str(error)) from error

@@ -7,62 +7,54 @@ const COLOR_CLASS: Record<TileColor, string> = {
 };
 
 const COLOR_LABEL: Record<TileColor, string> = {
-  0: "gray",
-  1: "yellow",
-  2: "green",
+  0: "gris — no está",
+  1: "amarillo — mal sitio",
+  2: "verde — correcto",
 };
 
 type BoardProps = {
   word: string;
   pattern: TileColor[];
-  editable?: boolean;
-  onWordChange?: (word: string) => void;
+  interactive?: boolean;
   onPatternChange?: (pattern: TileColor[]) => void;
 };
 
 export function Board({
   word,
   pattern,
-  editable = false,
-  onWordChange,
+  interactive = false,
   onPatternChange,
 }: BoardProps) {
   const cycleColor = (index: number) => {
-    if (!editable || !onPatternChange) return;
+    if (!interactive || !onPatternChange) return;
     const next = [...pattern] as TileColor[];
     next[index] = ((next[index] + 1) % 3) as TileColor;
     onPatternChange(next);
   };
 
-  const updateLetter = (index: number, letter: string) => {
-    if (!editable || !onWordChange) return;
-    const chars = word.padEnd(5, " ").split("");
-    chars[index] = letter.slice(-1).toLowerCase();
-    onWordChange(chars.join("").trimEnd());
-  };
-
   return (
-    <div className="board-row">
-      {Array.from({ length: 5 }).map((_, index) => (
-        <button
-          key={index}
-          type="button"
-          className={`tile ${COLOR_CLASS[pattern[index] ?? 0]}`}
-          title={`Click to cycle color (${COLOR_LABEL[pattern[index] ?? 0]})`}
-          onClick={() => cycleColor(index)}
-          disabled={!editable}
-        >
-          <input
-            className="tile-input"
-            maxLength={1}
-            value={word[index] ?? ""}
-            disabled={!editable}
-            style={{ pointerEvents: editable ? "auto" : "none" }}
-            onChange={(event) => updateLetter(index, event.target.value)}
-            onClick={(event) => event.stopPropagation()}
-          />
-        </button>
-      ))}
+    <div className="board-row" role="group" aria-label={word || "Guess row"}>
+      {Array.from({ length: 5 }).map((_, index) => {
+        const color = pattern[index] ?? 0;
+        const letter = word[index]?.toUpperCase() ?? "";
+        return (
+          <button
+            key={index}
+            type="button"
+            className={`tile ${COLOR_CLASS[color]}${interactive ? " tile-interactive" : " tile-locked"}`}
+            title={interactive ? `Clic para cambiar color (${COLOR_LABEL[color]})` : undefined}
+            onClick={() => cycleColor(index)}
+            disabled={!interactive}
+            aria-label={
+              letter
+                ? `${letter}, ${COLOR_LABEL[color]}`
+                : `Casilla ${index + 1}, ${COLOR_LABEL[color]}`
+            }
+          >
+            <span className="tile-letter">{letter}</span>
+          </button>
+        );
+      })}
     </div>
   );
 }
@@ -72,8 +64,10 @@ type HistoryBoardProps = {
 };
 
 export function HistoryBoard({ rows }: HistoryBoardProps) {
+  if (rows.length === 0) return null;
+
   return (
-    <div className="history">
+    <div className="history" aria-label="Jugadas anteriores">
       {rows.map((row, index) => (
         <Board key={index} word={row.word} pattern={row.pattern} />
       ))}

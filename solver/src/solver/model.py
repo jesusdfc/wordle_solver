@@ -5,27 +5,15 @@ from __future__ import annotations
 import math
 from collections import defaultdict
 from collections.abc import Sequence
-from enum import Enum
 
 from solver.data import PatternTable
 from solver.env import WordleEnv
 
 
-class Strategy(Enum):
-    ENTROPY = "entropy"
-    MINIMAX = "minimax"
-
-
 class WordleModel:
     """Maps belief (candidate secrets) to action values and best guesses."""
 
-    def __init__(
-        self,
-        *,
-        strategy: Strategy = Strategy.ENTROPY,
-        pattern_table: PatternTable | None = None,
-    ) -> None:
-        self.strategy = strategy
+    def __init__(self, *, pattern_table: PatternTable | None = None) -> None:
         self.pattern_table = pattern_table
 
     def _pattern(self, secret: str, guess: str) -> int:
@@ -52,24 +40,16 @@ class WordleModel:
             entropy -= probability * math.log2(probability)
         return entropy
 
-    def minimax_worst_case(self, guess: str, candidates: Sequence[str]) -> float:
-        """Return the size of the largest remaining bucket after playing `guess`."""
-        if not candidates:
-            return 0.0
-        return float(max(len(bucket) for bucket in self.partition(candidates, guess).values()))
-
     def score_guess(self, guess: str, candidates: Sequence[str]) -> float:
-        """Score a guess under the configured strategy."""
-        if self.strategy is Strategy.ENTROPY:
-            return self.expected_entropy(guess, candidates)
-        return -self.minimax_worst_case(guess, candidates)
+        """Score a guess by expected information in bits."""
+        return self.expected_entropy(guess, candidates)
 
     def best_guess(
         self,
         candidates: Sequence[str],
         guesses: Sequence[str] | None = None,
     ) -> str:
-        """Pick the guess that maximizes information under the configured strategy."""
+        """Pick the guess that maximizes expected entropy."""
         if not candidates:
             raise ValueError("candidates must not be empty")
 

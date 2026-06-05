@@ -11,3 +11,12 @@ export type SuggestResponse = {
   solved: boolean;
   candidates: string[] | null;
 };
+
+export type BenchmarkResponse = {
+  secret: string;
+  guesses: HistoryRow[];
+  solved: boolean;
+  guess_count: number;
+};
+
+export type AppMode = "menu" | "play" | "benchmark";

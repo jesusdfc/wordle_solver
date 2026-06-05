@@ -7,7 +7,7 @@ from collections.abc import Sequence
 from solver.belief import BeliefState
 from solver.data import PatternTable
 from solver.env import WordleEnv
-from solver.model import Strategy, WordleModel
+from solver.model import WordleModel
 
 
 class WordleAgent:
@@ -19,7 +19,6 @@ class WordleAgent:
         solution_words: Sequence[str] | None = None,
         *,
         model: WordleModel | None = None,
-        strategy: Strategy = Strategy.ENTROPY,
         pattern_table: PatternTable | None = None,
     ) -> None:
         if not all_words:
@@ -27,7 +26,7 @@ class WordleAgent:
 
         self.all_words = tuple(all_words)
         self.pattern_table = pattern_table
-        self.model = model or WordleModel(strategy=strategy, pattern_table=pattern_table)
+        self.model = model or WordleModel(pattern_table=pattern_table)
         initial = solution_words if solution_words is not None else all_words
         self.belief = BeliefState(initial, pattern_table=pattern_table)
 

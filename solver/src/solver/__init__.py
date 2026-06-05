@@ -6,12 +6,11 @@ from solver.agent import WordleAgent
 from solver.belief import BeliefState
 from solver.data import PatternTable, TableLookupPersistor, WordleWordsHandler
 from solver.env import WordleEnv, WordleObservation
-from solver.model import Strategy, WordleModel
+from solver.model import WordleModel
 
 __all__ = [
     "BeliefState",
     "PatternTable",
-    "Strategy",
     "TableLookupPersistor",
     "WordleAgent",
     "WordleEnv",
