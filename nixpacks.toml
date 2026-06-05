@@ -1,5 +1,5 @@
 # Railway/Nixpacks: install Node (frontend build) and Python (FastAPI backend).
 providers = ["node", "python"]
 
-[phases.setup]
-nixPkgs = ["python312", "nodejs_20"]
+[variables]
+NIXPACKS_NODE_VERSION = "20"
