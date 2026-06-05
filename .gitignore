@@ -1,4 +1,7 @@
 .venv/
+solver/.venv/
+backend/.venv/
+frontend/node_modules/
 __pycache__/
 .pytest_cache/
 .ruff_cache/
@@ -6,3 +9,5 @@ __pycache__/
 dist/
 build/
 uv.lock
+solver/uv.lock
+backend/uv.lock

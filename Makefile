@@ -1,5 +1,15 @@
-.PHONY: checks
+.PHONY: checks test backend frontend
 
 checks:
-	uv run ruff format
-	uv run ruff check . --fix
+	cd solver && uv sync --all-extras --quiet
+	cd solver && uv run ruff format .
+	cd solver && uv run ruff check . --fix
+
+test:
+	cd solver && uv run pytest -q
+
+backend:
+	cd backend && uv run uvicorn app.main:app --reload --port 8000
+
+frontend:
+	cd frontend && npm run dev

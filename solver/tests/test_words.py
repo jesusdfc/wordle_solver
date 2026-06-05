@@ -2,12 +2,14 @@ from pathlib import Path
 
 import pytest
 
-from palabra_solver.agent import Strategy, WordleAgent
-from palabra_solver.belief import BeliefState
-from palabra_solver.data import WordleWordsHandler
-from palabra_solver.env import WordleEnv
+from solver import default_dictionary_path
+from solver.agent import WordleAgent
+from solver.belief import BeliefState
+from solver.data import WordleWordsHandler
+from solver.env import WordleEnv
+from solver.model import Strategy, WordleModel
 
-LEMARIO = Path(__file__).resolve().parents[1] / "lemario-general-del-espanol.txt"
+LEMARIO = default_dictionary_path()
 
 
 class TestWordleWordsHandler:
@@ -97,26 +99,30 @@ class TestBeliefState:
         assert belief.is_solved() is True
 
 
-class TestWordleAgent:
+class TestWordleModel:
     def test_partition_groups_candidates(self) -> None:
         candidates = ("abaca", "abajo", "abano")
-        buckets = WordleAgent.partition(candidates, "abaca")
+        buckets = WordleModel.partition(candidates, "abaca")
         assert sum(len(bucket) for bucket in buckets.values()) == len(candidates)
 
     def test_expected_entropy_is_zero_for_single_candidate(self) -> None:
-        assert WordleAgent.expected_entropy("abaca", ("abaca",)) == 0.0
+        assert WordleModel.expected_entropy("abaca", ("abaca",)) == 0.0
 
     def test_best_guess_returns_only_candidate(self) -> None:
-        assert WordleAgent.best_guess(("abaca",)) == "abaca"
+        model = WordleModel()
+        assert model.best_guess(("abaca",)) == "abaca"
 
+    def test_minimax_prefers_balanced_split(self) -> None:
+        candidates = ("abcaa", "abcbb", "abccc")
+        model = WordleModel(strategy=Strategy.MINIMAX)
+        guess = model.best_guess(candidates, candidates)
+        assert guess in candidates
+
+
+class TestWordleAgent:
     def test_agent_solves_simple_secret(self) -> None:
         words = ("abaca", "abajo", "abano", "abril", "abono")
         agent = WordleAgent(words)
         guesses = agent.solve("abril", max_guesses=6)
         assert guesses[-1] == "abril"
         assert len(guesses) <= 6
-
-    def test_minimax_prefers_balanced_split(self) -> None:
-        candidates = ("abcaa", "abcbb", "abccc")
-        guess = WordleAgent.best_guess(candidates, candidates, strategy=Strategy.MINIMAX)
-        assert guess in candidates

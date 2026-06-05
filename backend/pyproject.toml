@@ -1,0 +1,26 @@
+[project]
+name = "wordle-backend"
+version = "0.1.0"
+description = "FastAPI backend for the Wordle solver"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "wordle-solver",
+]
+
+[project.optional-dependencies]
+dev = ["httpx>=0.28", "pytest>=8.0", "ruff>=0.4"]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+wordle-solver = { path = "../solver", editable = true }
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]

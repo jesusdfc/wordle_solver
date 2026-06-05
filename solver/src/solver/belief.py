@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 
-from palabra_solver.env import WordleEnv
+from solver.env import WordleEnv
 
 
 class BeliefState:

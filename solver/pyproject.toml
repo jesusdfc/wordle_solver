@@ -1,8 +1,7 @@
 [project]
-name = "palabra-solver"
+name = "wordle-solver"
 version = "0.1.0"
 description = "Optimal player for La Palabra del Día (Spanish Wordle)"
-readme = "README.md"
 requires-python = ">=3.11"
 dependencies = []
 
@@ -10,14 +9,14 @@ dependencies = []
 dev = ["pytest>=8.0", "ruff>=0.4"]
 
 [project.scripts]
-palabra = "palabra_solver.cli:main"
+palabra = "solver.cli:main"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/palabra_solver"]
+packages = ["src/solver"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

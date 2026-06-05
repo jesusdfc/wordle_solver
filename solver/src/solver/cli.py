@@ -5,11 +5,11 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from palabra_solver.agent import Strategy, WordleAgent
-from palabra_solver.data import WordleWordsHandler
-from palabra_solver.env import WordleEnv
-
-DEFAULT_LEMARIO = Path(__file__).resolve().parents[2] / "lemario-general-del-espanol.txt"
+from solver import default_dictionary_path
+from solver.agent import WordleAgent
+from solver.data import WordleWordsHandler
+from solver.env import WordleEnv
+from solver.model import Strategy, WordleModel
 
 
 def _load_words(path: Path, length: int) -> tuple[str, ...]:
@@ -28,7 +28,7 @@ def cmd_stats(args: argparse.Namespace) -> int:
 
 def cmd_suggest(args: argparse.Namespace) -> int:
     words = _load_words(args.dictionary, args.length)
-    agent = WordleAgent(words, strategy=Strategy(args.strategy))
+    agent = WordleAgent(words, model=WordleModel(strategy=Strategy(args.strategy)))
 
     for guess_feedback in args.guess:
         if len(guess_feedback) != args.length + 1:
@@ -56,7 +56,7 @@ def cmd_suggest(args: argparse.Namespace) -> int:
 
 def cmd_solve(args: argparse.Namespace) -> int:
     words = _load_words(args.dictionary, args.length)
-    agent = WordleAgent(words, strategy=Strategy(args.strategy))
+    agent = WordleAgent(words, model=WordleModel(strategy=Strategy(args.strategy)))
     guesses = agent.solve(args.secret.lower(), max_guesses=args.max_guesses)
 
     print(f"Secret: {args.secret.lower()}")
@@ -87,8 +87,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--dictionary",
         type=Path,
-        default=DEFAULT_LEMARIO,
-        help="Path to the Spanish dictionary file (default: lemario at project root)",
+        default=default_dictionary_path(),
+        help="Path to the Spanish dictionary file (default: data/lemario at repo root)",
     )
     parser.add_argument(
         "--length",

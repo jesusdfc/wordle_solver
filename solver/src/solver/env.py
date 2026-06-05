@@ -127,6 +127,19 @@ class WordleEnv:
         return value
 
     @staticmethod
+    def pattern_from_list(codes: Sequence[int]) -> int:
+        """Encode a list of GRAY/YELLOW/GREEN codes into a base-3 integer."""
+        value = 0
+        for index, code in enumerate(codes):
+            value += code * (3**index)
+        return value
+
+    @staticmethod
+    def pattern_to_list(value: int, *, length: int = 5) -> list[int]:
+        """Decode a base-3 pattern integer into GRAY/YELLOW/GREEN codes."""
+        return [(value // (3**index)) % 3 for index in range(length)]
+
+    @staticmethod
     def pattern_to_str(value: int, *, length: int = 5, use_emoji: bool = True) -> str:
         """Render a pattern integer as emoji tiles or ASCII letters."""
         symbols = WordleEnv._PATTERN_SYMBOLS if use_emoji else WordleEnv._ASCII_SYMBOLS

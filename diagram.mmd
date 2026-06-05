@@ -2,28 +2,22 @@
 %% Preview in VS Code (Mermaid extension), GitHub, or https://mermaid.live
 
 flowchart LR
-    data["<b>data.py</b><br/>WordleWordsHandler<br/>load() · normalize()"]
-    env["<b>env.py</b><br/>WordleEnv<br/>reset() · step() · pattern()"]
-    belief["<b>belief.py</b><br/>BeliefState<br/>update() · candidates"]
-    agent["<b>agent.py</b><br/>WordleAgent<br/>suggest() · entropy / minimax"]
-    cli["<b>cli.py</b><br/>palabra command"]
+    lemario["<b>data/</b><br/>lemario txt"]
+    pkg["<b>solver/</b><br/>Python package"]
+    backend["<b>backend/</b><br/>FastAPI"]
+    frontend["<b>frontend/</b><br/>React UI"]
 
-    data -->|"valid word list"| env
-    env -->|"observation<br/>(guess + pattern)"| belief
-    belief -->|"belief state"| agent
-    agent -->|"action<br/>(guess word)"| env
-    cli -->|"suggest / solve"| agent
-    cli -->|"load dictionary"| data
+    data_mod["data.py<br/>WordleWordsHandler"]
+    env["env.py<br/>WordleEnv"]
+    belief["belief.py<br/>BeliefState"]
+    model["model.py<br/>WordleModel"]
+    agent["agent.py<br/>WordleAgent"]
 
-    subgraph episode ["Episode loop"]
-        direction LR
-        ep_reset["env.reset()"] --> ep_act["agent.suggest()"]
-        ep_act --> ep_step["env.step(guess)"]
-        ep_step --> ep_observe["belief.update(pattern)"]
-        ep_observe --> ep_act
-    end
-
-    env -.-> ep_reset
-    agent -.-> ep_act
-    env -.-> ep_step
-    belief -.-> ep_observe
+    lemario --> data_mod
+    data_mod --> env
+    env --> belief
+    belief --> model
+    model --> agent
+    frontend -->|"POST /api/suggest"| backend
+    backend --> agent
+    backend --> data_mod
