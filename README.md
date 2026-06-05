@@ -46,12 +46,12 @@ uv run palabra solve abril
 
 ### First run / caches
 
-On first use the solver builds cached files under `data/`:
+On first use the solver builds cached files (gitignored, regenerated automatically):
 
 - `words_5.pickle` — normalized word list
 - `word_5_dict.pickle` — pattern lookup matrix (~25 MB, ~45 s to build once)
 
-These are gitignored and regenerated automatically.
+By default these live under `data/`. On Railway, set `WORDLE_CACHE_DIR=/app/data/cache` with a volume mounted there.
 
 ## Dictionary
 
@@ -59,11 +59,11 @@ Word list: [`lemario-general-del-espanol.txt`](https://github.com/olea/lemarios/
 
 Bundled copy: `data/lemario-general-del-espanol.txt`.
 
-## Deploy (Railway — recommended)
+## Deploy (Railway)
 
-Single service: FastAPI serves the built React UI and `/api/*` from one URL. No Netlify or split CORS setup required.
+One service serves the React UI and `/api/*` from the same URL (see `backend/app/main.py` static mount).
 
-### 1. Railway
+### Railway
 
 1. Push this repo to GitHub.
 2. [Railway](https://railway.app) → **New Project** → **Deploy from GitHub** → select the repo.
@@ -71,38 +71,30 @@ Single service: FastAPI serves the built React UI and `/api/*` from one URL. No 
 4. **Volume (recommended):** Service → **Volumes** → mount at **`/app/data/cache`**  
    Set env **`WORDLE_CACHE_DIR=/app/data/cache`**.  
    Persists pickles across deploys; lemario stays in the image at `data/lemario-general-del-espanol.txt`.
-5. **Environment variables**:
+5. **Environment variables** (optional):
 
    | Variable | Value |
    |----------|--------|
    | `WORDLE_CACHE_DIR` | `/app/data/cache` (when using a volume) |
-   | `CORS_ORIGINS` | Leave empty for same-origin Railway deploy |
-
-   Do **not** set `VITE_API_URL` on Railway — the UI calls `/api` on the same host.
+   | `CORS_ORIGINS` | Leave empty unless you need extra allowed origins |
 
 6. Deploy. Open the generated public URL (e.g. `https://wordle-solver-production.up.railway.app`).
 7. Verify: `/api/health` → `{"status":"ok"}`, `/` → app menu.
 
 **Cost:** Railway Hobby plan (~$5/month) for always-on + volume.
 
-Build runs `scripts/railway-build.sh` (npm build + copy to `backend/static` + `uv sync`).  
-Start runs `scripts/railway-start.sh` (warm cache + uvicorn).
-
-### Alternative: Netlify + Render (split)
-
-See [`netlify.toml`](netlify.toml) and [`render.yaml`](render.yaml). Set `VITE_API_URL` on Netlify and `CORS_ORIGINS` on Render.
-
-Local dev: `./init.sh` or frontend + backend separately; leave `VITE_API_URL` empty.
+- **Build:** `scripts/railway-build.sh` — npm build, copy to `backend/static`, `uv sync`
+- **Start:** `scripts/railway-start.sh` — warm pickle cache, then uvicorn
 
 ### Environment variables
 
 | Variable | Where | Purpose |
 |----------|--------|---------|
-| `WORDLE_CACHE_DIR` | Railway | Pickle cache dir (e.g. `/app/data/cache` on a volume) |
-| `VITE_API_URL` | Netlify only | Split-deploy API base URL |
-| `CORS_ORIGINS` | Railway / Render | Extra allowed origins (comma-separated) |
+| `WORDLE_CACHE_DIR` | Railway | Pickle cache directory on a mounted volume |
+| `CORS_ORIGINS` | Railway / local backend | Extra allowed browser origins (comma-separated) |
+| `VITE_API_URL` | Local frontend only | Leave empty; Vite proxies `/api` to port 9000 |
 
-See [`frontend/.env.example`](frontend/.env.example) and [`backend/.env.example`](backend/.env.example).
+See [`backend/.env.example`](backend/.env.example). Local frontend dev does not need a `.env` file.
 
 ## License
 

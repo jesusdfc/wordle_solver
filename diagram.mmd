@@ -1,23 +1,35 @@
 %% palabra-solver architecture
 %% Preview in VS Code (Mermaid extension), GitHub, or https://mermaid.live
 
-flowchart LR
-    lemario["<b>data/</b><br/>lemario txt"]
-    pkg["<b>solver/</b><br/>Python package"]
-    backend["<b>backend/</b><br/>FastAPI"]
-    frontend["<b>frontend/</b><br/>React UI"]
+flowchart TB
+    subgraph prod ["Production (Railway)"]
+        railway["Single web service<br/>uvicorn + static UI"]
+        vol["Volume /app/data/cache<br/>pickle caches"]
+        railway --> vol
+    end
 
-    data_mod["data/<br/>WordleWordsHandler<br/>PatternTable"]
-    env["env.py<br/>WordleEnv"]
-    belief["belief.py<br/>BeliefState"]
-    model["model.py<br/>WordleModel"]
-    agent["agent.py<br/>WordleAgent"]
+    subgraph local ["Local dev"]
+        frontend["frontend/<br/>React + Vite"]
+        backend["backend/<br/>FastAPI"]
+        frontend -->|"proxy /api"| backend
+    end
+
+    subgraph solver_pkg ["solver/ package"]
+        data_mod["data/<br/>WordleWordsHandler<br/>PatternTable"]
+        env["env.py<br/>WordleEnv"]
+        belief["belief.py<br/>BeliefState"]
+        model["model.py<br/>WordleModel"]
+        agent["agent.py<br/>WordleAgent"]
+    end
+
+    lemario["data/lemario txt"]
 
     lemario --> data_mod
     data_mod --> env
     env --> belief
     belief --> model
     model --> agent
-    frontend -->|"POST /api/suggest"| backend
     backend --> agent
     backend --> data_mod
+    railway --> agent
+    railway --> data_mod
