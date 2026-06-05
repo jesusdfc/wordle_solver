@@ -550,3 +550,23 @@ body {
   font-weight: 600;
   font-size: 0.95rem;
 }
+
+.site-footer {
+  margin-top: 1.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.site-footer a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.12s ease;
+}
+
+.site-footer a:hover {
+  color: var(--green);
+}

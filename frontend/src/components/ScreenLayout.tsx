@@ -28,6 +28,17 @@ export function ScreenLayout({ title, subtitle, badge, onBack, children }: Scree
         </header>
 
         {children}
+
+        <footer className="site-footer">
+          Hecho por{" "}
+          <a
+            href="https://github.com/jesusdfc/wordle_solver"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Jesús de la Fuente Cedeño
+          </a>
+        </footer>
       </div>
     </main>
   );
