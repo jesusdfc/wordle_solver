@@ -8,7 +8,7 @@ export type StrategyInfo = {
   default_opening_word: string | null;
   belief_threshold: number | null;
   warning: string | null;
-  highlight: "best" | "fast" | null;
+  highlight: "best" | "fast" | "recommended" | null;
 };
 
 export type TileColor = 0 | 1 | 2;

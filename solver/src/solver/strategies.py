@@ -67,6 +67,7 @@ class WordleStrategies:
             label="Fixed + entropy",
             description="Fixed opener, then entropy.",
             requires_opening_word=True,
+            highlight="fast",
         ),
         "entropy-threshold-bellman": StrategySpec(
             id="entropy-threshold-bellman",
@@ -104,7 +105,7 @@ class WordleStrategies:
                     label=f"{base.label} ({threshold})",
                     description=base.description,
                     belief_threshold=threshold,
-                    highlight="fast" if threshold == 50 else None,
+                    highlight="recommended" if threshold == 20 else None,
                 )
             )
         return tuple(items)

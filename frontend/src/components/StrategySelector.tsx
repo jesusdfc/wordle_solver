@@ -13,7 +13,8 @@ type StrategySelectorProps = {
 
 const HIGHLIGHT_LABELS: Record<NonNullable<StrategyInfo["highlight"]>, string> = {
   best: "Best performant",
-  fast: "Faster",
+  fast: "Fastest",
+  recommended: "Recommended",
 };
 
 function optionClassName(option: StrategyInfo, selected: boolean): string {
@@ -21,6 +22,7 @@ function optionClassName(option: StrategyInfo, selected: boolean): string {
   if (selected) classes.push("strategy-option-active");
   if (option.highlight === "best") classes.push("strategy-option-highlight-best");
   if (option.highlight === "fast") classes.push("strategy-option-highlight-fast");
+  if (option.highlight === "recommended") classes.push("strategy-option-highlight-recommended");
   return classes.join(" ");
 }
 

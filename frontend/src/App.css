@@ -211,6 +211,16 @@ body {
   box-shadow: 0 0 0 1px rgba(90, 127, 181, 0.35);
 }
 
+.strategy-option-highlight-recommended {
+  border-color: rgba(201, 180, 88, 0.8);
+  box-shadow: inset 0 0 0 1px rgba(201, 180, 88, 0.28);
+}
+
+.strategy-option-highlight-recommended.strategy-option-active {
+  border-color: rgba(201, 180, 88, 0.95);
+  box-shadow: 0 0 0 1px rgba(201, 180, 88, 0.4);
+}
+
 .strategy-option:has(input:disabled) {
   opacity: 0.55;
   cursor: not-allowed;
@@ -250,6 +260,12 @@ body {
   color: #3f5f8f;
   background: rgba(90, 127, 181, 0.15);
   border: 1px solid rgba(90, 127, 181, 0.45);
+}
+
+.strategy-option-tag-recommended {
+  color: #8a7428;
+  background: rgba(201, 180, 88, 0.18);
+  border: 1px solid rgba(201, 180, 88, 0.5);
 }
 
 .strategy-option-hint {

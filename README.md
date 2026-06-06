@@ -68,9 +68,8 @@ The web app and CLI expose the same six strategies benchmarked below. **Threshol
 **Takeaways**
 
 - **Threshold Bellman (20)** is the most accurate solver here (3.95 mean guesses) but roughly **60× slower** than hard Bellman at the same threshold, because Bellman probes the entire dictionary instead of candidates only.
-- **Hard Bellman** variants stay within ~0.16 guesses of the best mean while finishing 100 games in under a minute. Threshold **50** is a reasonable default trade-off; **100** adds little accuracy for ~2× the runtime of threshold 20.
-- Pure **entropy** baselines are fast and simple but leave ~0.1–0.16 guesses on the table versus the Bellman hybrids.
-- **Fixed opener** (`acero`) matches full entropy on accuracy in this sample — a good opening word matters, but the hybrid Bellman phase is where most of the gain comes from.
+- **Hard Bellman (20)** is the recommended daily driver: 4.00 mean guesses in ~23 s — second-fastest among Bellman hybrids and nearly as accurate as threshold Bellman without the 26-minute runtime.
+- **Fixed + entropy** is the fastest option (~6.6 s) but matches pure entropy on accuracy; use it when speed matters more than the Bellman endgame.
 
 **Possible next steps**
 
