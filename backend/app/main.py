@@ -3,13 +3,15 @@
 import os
 from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from app.api.routes import router
 
 STATIC_DIR = Path(__file__).resolve().parent.parent / "static"
+INDEX_HTML = STATIC_DIR / "index.html"
 
 
 def _cors_origins() -> list[str]:
@@ -36,4 +38,22 @@ app.add_middleware(
 app.include_router(router, prefix="/api")
 
 if STATIC_DIR.is_dir():
-    app.mount("/", StaticFiles(directory=STATIC_DIR, html=True), name="frontend")
+    assets_dir = STATIC_DIR / "assets"
+    if assets_dir.is_dir():
+        app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
+
+    @app.get("/{full_path:path}")
+    async def serve_spa(full_path: str) -> FileResponse:
+        """Serve static files or index.html for client-side routes (/play, /explore, …)."""
+        if full_path == "api" or full_path.startswith("api/"):
+            raise HTTPException(status_code=404, detail="Not Found")
+
+        if full_path:
+            candidate = STATIC_DIR / full_path
+            if candidate.is_file():
+                return FileResponse(candidate)
+
+        if not INDEX_HTML.is_file():
+            raise HTTPException(status_code=404, detail="Not Found")
+
+        return FileResponse(INDEX_HTML)
