@@ -1,9 +1,10 @@
 import { useState } from "react";
 
 import { fetchSuggestion } from "../api/client";
-import type { HistoryRow, TileColor } from "../types";
+import type { HistoryRow, SolverStrategy, TileColor } from "../types";
 import { Board, HistoryBoard } from "./Board";
 import { ScreenLayout } from "./ScreenLayout";
+import { StrategySelector } from "./StrategySelector";
 
 const EMPTY_PATTERN: TileColor[] = [0, 0, 0, 0, 0];
 const MAX_GUESSES = 6;
@@ -19,6 +20,8 @@ export function PlayScreen({ onBack }: PlayScreenProps) {
   const [remaining, setRemaining] = useState<number | null>(null);
   const [candidates, setCandidates] = useState<string[] | null>(null);
   const [solved, setSolved] = useState(false);
+  const [strategy, setStrategy] = useState<SolverStrategy>("entropy-threshold-bellman");
+  const [openingWord, setOpeningWord] = useState("cario");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -48,7 +51,10 @@ export function PlayScreen({ onBack }: PlayScreenProps) {
     }
 
     try {
-      const result = await fetchSuggestion(nextHistory);
+      const result = await fetchSuggestion(nextHistory, {
+        strategy,
+        openingWord: openingWord || undefined,
+      });
       resetCurrent(result.suggestion);
       setRemaining(result.remaining);
       setCandidates(result.candidates);
@@ -71,6 +77,7 @@ export function PlayScreen({ onBack }: PlayScreenProps) {
 
   const guessNumber = history.length + (currentWord ? 1 : 0);
   const gameOver = history.length >= MAX_GUESSES || (solved && remaining === 1);
+  const strategyLocked = loading || history.length > 0 || Boolean(currentWord);
 
   return (
     <ScreenLayout
@@ -81,9 +88,16 @@ export function PlayScreen({ onBack }: PlayScreenProps) {
           siguiente palabra.
         </>
       }
-      badge="entropy"
+      badge={strategy}
       onBack={onBack}
     >
+      <StrategySelector
+        value={strategy}
+        onChange={setStrategy}
+        openingWord={openingWord}
+        onOpeningWordChange={setOpeningWord}
+        disabled={strategyLocked}
+      />
       <section className="board-section">
         <HistoryBoard rows={history} />
 

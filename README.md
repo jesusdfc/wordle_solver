@@ -1,184 +1,98 @@
 # Spanish Wordle Solver
 
-Optimal entropy-based solver for **La Palabra del Día** (Spanish Wordle). Given past guesses and feedback, it picks the next guess that **maximizes expected information** about the hidden word.
+Solvers for **La Palabra del Día** (Spanish Wordle) under a **uniform prior** over remaining dictionary words.
 
-## How the entropy solver works
+| Strategy | Opening | Hard | Threshold | Probes (Bellman) | Doc |
+|----------|---------|------|-----------|------------------|-----|
+| **full-entropy** | Entropy | no | — | — | [docs/entropy.md](docs/entropy.md) |
+| **fixed-entropy** | User word (`acero` in benchmark) | no | — | — | [docs/entropy.md](docs/entropy.md) |
+| **entropy-threshold-bellman** | Entropy | no | 20 | full dict | [docs/bellman.md](docs/bellman.md) |
+| **entropy-hard-bellman** | Entropy | **yes** | 20 / 50 / 100 | candidates only | [docs/bellman.md](docs/bellman.md) |
 
-Wordle is a **partially observable** guessing game: the secret is hidden, but each guess returns a color pattern (⬛ gray, 🟨 yellow, 🟩 green). The solver treats that as a filtering problem:
+While \|B\| ≥ threshold, Bellman strategies use greedy entropy with the full dictionary as the probe pool. Below the threshold they switch to Bellman DP; **hard** controls whether Bellman probes are restricted to remaining candidates (`yes`) or the full dictionary (`no`).
 
-1. **Belief** — maintain the set of dictionary words still consistent with every guess so far.
-2. **Partition** — for a candidate guess, group those words by the pattern each would produce.
-3. **Score** — pick the guess whose pattern bins are as **evenly sized** as possible.
-4. **Update** — after real feedback arrives, keep only the bin that matches and repeat.
+All strategies maintain a **belief** over compatible secrets and partition candidates by feedback pattern. See [docs/entropy.md](docs/entropy.md) for the shared filtering setup.
 
-The implementation lives in `solver/src/solver/belief.py` (belief update) and `solver/src/solver/model.py` (partition + entropy scoring). The agent evaluates guesses from the **full dictionary**, not only remaining candidates, so it can suggest strong “probe” words early on.
+The web app and CLI expose the same six strategies benchmarked below. **Threshold Bellman** can be very slow in play — each suggestion below the belief threshold runs exact DP over the full dictionary.
 
-### Pattern bins (pathways)
+## Benchmark results
 
-Each guess splits the current belief into **bins** — one per possible feedback pattern. You only observe **one** bin after the guess; the others are paths you did not take.
+100 fixed secret words (`data/benchmark_words.json`, seed 42), full 5-letter dictionary (~5k words), max 6 guesses. Regenerate with `make benchmark` or `uv run palabra benchmark`.
 
-```mermaid
-flowchart TB
-    subgraph before ["Belief before guess · N = 12 candidates"]
-        direction LR
-        c["abril · abono · abajo · abano · …"]
-    end
+![Strategy benchmark](outputs/benchmark.png)
 
-    g["Guess: AUDIO"]
+| Strategy | Mean guesses | Wall time (s) | Solve rate |
+|----------|-------------:|--------------:|-----------:|
+| Full entropy | 4.11 | 25.7 | 100% |
+| Fixed + entropy (`acero`) | 4.11 | 6.6 | 100% |
+| Entropy + threshold Bellman (20) | **3.95** | **1589** | 100% |
+| Entropy + hard Bellman (20) | 4.00 | 22.6 | 100% |
+| Entropy + hard Bellman (50) | 4.09 | 24.2 | 100% |
+| Entropy + hard Bellman (100) | 4.08 | 42.7 | 100% |
 
-    subgraph bins ["Pattern bins (pathways)"]
-        direction TB
-        b1["⬛⬛⬛⬛⬛  ·  5 words"]
-        b2["⬛🟨⬛⬛⬛  ·  4 words"]
-        b3["⬛⬛🟩⬛⬛  ·  3 words"]
-    end
+**Takeaways**
 
-    subgraph after ["Belief after feedback"]
-        direction LR
-        kept["Keep one bin only → 3–5 candidates left"]
-    end
+- **Threshold Bellman (20)** is the most accurate solver here (3.95 mean guesses) but roughly **60× slower** than hard Bellman at the same threshold, because Bellman probes the entire dictionary instead of candidates only.
+- **Hard Bellman** variants stay within ~0.16 guesses of the best mean while finishing 100 games in under a minute. Threshold **50** is a reasonable default trade-off; **100** adds little accuracy for ~2× the runtime of threshold 20.
+- Pure **entropy** baselines are fast and simple but leave ~0.1–0.16 guesses on the table versus the Bellman hybrids.
+- **Fixed opener** (`acero`) matches full entropy on accuracy in this sample — a good opening word matters, but the hybrid Bellman phase is where most of the gain comes from.
 
-    before --> g --> bins
-    bins -->|"you see one pattern"| after
-```
+**Possible next steps**
 
-**Stable vs. skewed splits.** A good entropy guess makes the bins similar in size — no matter which pattern appears, you eliminate roughly the same fraction of the belief. A bad guess puts almost every secret in one giant bin: most of the time you learn almost nothing, and only a rare pattern would narrow the search sharply.
+- **Deep reinforcement learning** — train a policy or value network on simulated Wordle episodes to approximate Bellman-quality decisions without exhaustive DP at inference time.
+- **Learned value function** — replace tabular Bellman memoization with a neural critic over belief summaries (entropy, candidate count, letter coverage).
+- **Opening-book learning** — meta-learn openers per dictionary or language variant instead of fixed entropy picks.
+- **Faster threshold Bellman** — stronger precomputation, candidate pruning, or anytime approximate DP to keep optimality where it matters without minute-long pauses.
 
-```mermaid
-flowchart LR
-    subgraph good ["High entropy · balanced bins"]
-        direction TB
-        g1["Bin A · 33%"]
-        g2["Bin B · 33%"]
-        g3["Bin C · 34%"]
-    end
-
-    subgraph bad ["Low entropy · one dominant bin"]
-        direction TB
-        b1["Bin A · 92%"]
-        b2["Bin B · 5%"]
-        b3["Bin C · 3%"]
-    end
-```
-
-That balance is what people mean by a **stable** strategy: outcomes are spread evenly, so expected progress per guess is predictable instead of relying on a lucky pattern.
-
-### Mathematics
-
-#### Belief state
-
-After observations $(g_1, p_1), \ldots, (g_t, p_t)$, the belief is the set of secrets still compatible with the rules of Wordle feedback:
-
-$$
-\mathcal{B}_t = \{\, s \in \mathcal{W} \mid \forall i \le t:\ \mathrm{pattern}(s, g_i) = p_i \,\}
-$$
-
-We use a **uniform prior** over $\mathcal{B}_t$: every remaining word is equally likely to be the secret.
-
-#### Partition induced by a guess
-
-Fix a guess $g$ and current belief $\mathcal{B}$ with $N = |\mathcal{B}|$. Each secret $s \in \mathcal{B}$ produces an integer pattern $p = \mathrm{pattern}(s, g)$ (gray / yellow / green encoded as a single code). This defines a partition into bins:
-
-$$
-\mathcal{B} = \bigsqcup_{p \in \mathcal{P}(g)} B_p, \qquad B_p = \{\, s \in \mathcal{B} : \mathrm{pattern}(s, g) = p \,\}
-$$
-
-Let $n_p = |B_p|$. If the secret is uniform on $\mathcal{B}$, the probability of seeing pattern $p$ after guessing $g$ is:
-
-$$
-\mathbb{P}(p \mid g, \mathcal{B}) = \frac{n_p}{N}
-$$
-
-#### Shannon entropy of the split
-
-The **expected entropy** (expected information, in **bits**) of guess $g$ is the Shannon entropy of that distribution:
-
-$$
-H(g) = -\sum_{p} \frac{n_p}{N} \log_2 \frac{n_p}{N}
-$$
-
-This is exactly what `WordleModel.expected_entropy` computes: group candidates into bins, then apply $-\sum p \log_2 p$.
-
-**Interpretation:** $H(g)$ is the average number of bits of information you expect to gain from the feedback. Equivalently, if the secret were chosen uniformly from $\mathcal{B}$, observing the pattern reduces uncertainty from $\log_2 N$ bits to $\log_2 n_p$ bits; averaging over $p$ gives:
-
-$$
-\mathbb{E}[\text{reduction}] = \sum_p \frac{n_p}{N}\left(\log_2 N - \log_2 n_p\right) = H(g)
-$$
-
-#### Why maximize entropy?
-
-The solver chooses:
-
-$$
-g^* = \arg\max_{g \in \mathcal{W}} H(g)
-$$
-
-(tie-break: lexicographically smallest word).
-
-Maximizing $H(g)$ pushes the bin probabilities $n_p/N$ toward **equal size**. For a fixed number of bins $k$, entropy is largest when every bin has $n_p \approx N/k$ — the most **evenly distributed** split.
-
-| Property | Effect |
-|----------|--------|
-| **Maximum** $H(g)$ | Bins are balanced → typical feedback shrinks the belief by a steady factor |
-| **Minimum** $H(g)$ | One bin dominates → you usually stay in a huge candidate set |
-| **Units** | Bits; $H(g) = \log_2 k$ when all $k$ bins are equal |
-
-**Example.** $N = 8$ candidates, three bins of sizes 3, 3, 2:
-
-$$
-H = -\tfrac{3}{8}\log_2\tfrac{3}{8} - \tfrac{3}{8}\log_2\tfrac{3}{8} - \tfrac{2}{8}\log_2\tfrac{2}{8} \approx 1.56\ \text{bits}
-$$
-
-If instead bins were 7, 1, 0 (one heavy pathway):
-
-$$
-H \approx 0.54\ \text{bits}
-$$
-
-Same game, same dictionary — the balanced guess is preferred because it **maximizes expected information** regardless of which color pattern the game returns.
-
-#### Closed form for two bins
-
-When a guess splits the belief into exactly two patterns with counts $n$ and $N - n$:
-
-$$
-H(g) = -\frac{n}{N}\log_2\frac{n}{N} - \frac{N-n}{N}\log_2\frac{N-n}{N}
-$$
-
-This is maximized at $n = N/2$ (a perfect 50/50 split, $H = 1$ bit). Wordle partitions usually have more than two bins, but the same principle holds: **spread the probability mass evenly across pathways**.
-
----
-
-## Solver package
-
-Python package: `wordle-solver` in `solver/`.
+Raw numbers: [outputs/results.json](outputs/results.json). Plot only: `uv run palabra benchmark --plot-only`.
 
 ```bash
-# Install and run tests
-make test
+cd solver && uv sync --extra benchmark
+uv run palabra benchmark
+# or: make benchmark
+```
 
-# Lint / format
+Regenerate the secret-word list: `uv run palabra benchmark --resample-words`.
+
+## Development
+
+```bash
+make test
 make checks
 ```
 
-**CLI:**
+**CLI** (`solver/src/solver/cli/`):
+
+| Command | Role |
+|---------|------|
+| `palabra play` | Interactive suggestions (web **Play** tab) |
+| `palabra explore` | Solve a secret and show the path (web **Explore** tab) |
+| `palabra benchmark` | Compare all strategies and export plots |
+| `palabra stats` | Dictionary statistics |
+| `palabra warm-bellman-cache` | Precompute Bellman cache |
 
 ```bash
 cd solver && uv sync
-uv run palabra suggest --guess audio02201   # next guess from feedback string
-uv run palabra solve abril                  # auto-play a secret word
+uv run palabra play --guess audio02201
+uv run palabra explore --strategy entropy-threshold-bellman abril
+uv run palabra --strategy fixed-entropy --opening-word cario explore abril
+uv run palabra --strategy entropy-hard-bellman@50 explore abril
 ```
 
 Feedback encoding in `--guess`: `0` = gray, `1` = yellow, `2` = green (per letter, left to right).
 
+Default strategy is **entropy-threshold-bellman**.
+
 ### First run / caches
 
-On first use the solver builds cached files (gitignored, regenerated automatically):
+On first use the solver builds cached files under `data/cache/` (gitignored, regenerated automatically):
 
-- `words_5.pickle` — normalized word list
-- `word_5_dict.pickle` — pattern lookup matrix (~25 MB, ~45 s to build once)
+- `data/cache/words_5.pickle` — normalized word list
+- `data/cache/entropy_5_lookup_table.pickle` — pattern lookup matrix (~25 MB, ~45 s to build once)
+- `data/cache/threshold_bellman_5_value_function.pickle` — memoized threshold Bellman value function (grows incrementally as you play)
+- `data/cache/hard_bellman_5_value_function.pickle` — memoized hard-mode Bellman value function
 
-By default these live under `data/`. Override with the `WORDLE_CACHE_DIR` environment variable if needed.
+By default these live under `data/cache/`. Override with the `WORDLE_CACHE_DIR` environment variable if needed.
 
 ## Dictionary
 

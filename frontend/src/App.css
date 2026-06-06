@@ -125,6 +125,107 @@ body {
   border-radius: 999px;
 }
 
+.strategy-picker {
+  margin-bottom: 1.25rem;
+}
+
+.strategy-picker-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.strategy-picker-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 0.5rem;
+}
+
+.opening-word-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: 0.75rem;
+}
+
+.opening-word-field input {
+  max-width: 8rem;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-raised);
+  color: var(--text);
+  font: inherit;
+  text-transform: lowercase;
+}
+
+.error-text {
+  margin: 0 0 0.5rem;
+  color: var(--danger, #c0392b);
+  font-size: 0.85rem;
+}
+
+.strategy-option {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-raised);
+  cursor: pointer;
+  transition: border-color 0.12s ease, background 0.12s ease;
+}
+
+.strategy-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.strategy-option-active {
+  border-color: rgba(106, 170, 100, 0.65);
+  background: rgba(106, 170, 100, 0.08);
+}
+
+.strategy-option:has(input:disabled) {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.strategy-option-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.strategy-option-hint {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  line-height: 1.3;
+}
+
+.strategy-option-warning {
+  font-size: 0.68rem;
+  color: #b8860b;
+  line-height: 1.3;
+}
+
+.strategy-warning-banner {
+  margin: 0.65rem 0 0;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid rgba(184, 134, 11, 0.45);
+  border-radius: var(--radius);
+  background: rgba(184, 134, 11, 0.1);
+  color: #8a6914;
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
 .board-section {
   display: flex;
   flex-direction: column;
@@ -432,7 +533,7 @@ body {
   color: var(--green);
 }
 
-.menu-btn-benchmark .menu-btn-icon {
+.menu-btn-explore .menu-btn-icon {
   background: rgba(201, 180, 88, 0.15);
   color: var(--yellow);
 }
@@ -454,7 +555,7 @@ body {
   line-height: 1.35;
 }
 
-.benchmark-input {
+.explore-input {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -521,7 +622,7 @@ body {
   color: var(--text);
 }
 
-.benchmark-board {
+.explore-board {
   min-height: 12rem;
 }
 

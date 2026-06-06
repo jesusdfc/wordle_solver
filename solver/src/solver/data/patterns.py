@@ -2,12 +2,9 @@
 
 from __future__ import annotations
 
-import pickle
+from collections.abc import Sequence
 from dataclasses import dataclass, field
-from pathlib import Path
 
-from solver.data.cache import get_cache_dir
-from solver.data.words import WordleWordsHandler
 from solver.env import WordleEnv
 
 
@@ -18,6 +15,7 @@ class PatternTable:
     words: tuple[str, ...]
     _patterns: bytes
     _index: dict[str, int] = field(init=False, repr=False)
+    _matrix: object = field(default=None, init=False, repr=False, compare=False)
 
     def __post_init__(self) -> None:
         expected = len(self.words) ** 2
@@ -29,12 +27,130 @@ class PatternTable:
             {word: index for index, word in enumerate(self.words)},
         )
 
+    def as_matrix(self):
+        """Return the secret × guess pattern matrix as a NumPy uint8 array."""
+        matrix = object.__getattribute__(self, "_matrix")
+        if matrix is not None:
+            return matrix
+
+        import numpy as np
+
+        count = len(self.words)
+        matrix = np.frombuffer(self._patterns, dtype=np.uint8).reshape(count, count)
+        object.__setattr__(self, "_matrix", matrix)
+        return matrix
+
+    @property
+    def _pattern_count(self) -> int:
+        return 3 ** len(self.words[0])
+
+    def _candidate_indices(self, candidates: Sequence[str]):
+        import numpy as np
+
+        return np.fromiter(
+            (self._index[word] for word in candidates),
+            dtype=np.intp,
+            count=len(candidates),
+        )
+
+    def _pool_indices(self, pool: Sequence[str]):
+        import numpy as np
+
+        return np.fromiter(
+            (self._index[word] for word in pool),
+            dtype=np.intp,
+            count=len(pool),
+        )
+
+    def bucket_sizes(self, candidates: Sequence[str], guess: str):
+        """Return non-zero bucket sizes for *guess* over *candidates*."""
+        import numpy as np
+
+        guess_index = self._index[guess]
+        patterns = self.as_matrix()[self._candidate_indices(candidates), guess_index]
+        counts = np.bincount(patterns, minlength=self._pattern_count)
+        return counts[counts > 0]
+
+    def entropy_scores(self, candidates: Sequence[str], pool: Sequence[str]):
+        """Expected Shannon entropy (bits) for every guess in *pool*."""
+        import numpy as np
+
+        if not candidates or not pool:
+            return np.array([], dtype=np.float64)
+
+        matrix = self.as_matrix()
+        candidate_indices = self._candidate_indices(candidates)
+        pool_indices = self._pool_indices(pool)
+        patterns = matrix[candidate_indices][:, pool_indices]
+        total = len(candidates)
+        minlength = self._pattern_count
+
+        scores = np.empty(len(pool_indices), dtype=np.float64)
+        for index, column in enumerate(patterns.T):
+            counts = np.bincount(column, minlength=minlength)
+            counts = counts[counts > 0]
+            probabilities = counts / total
+            scores[index] = -np.sum(probabilities * np.log2(probabilities))
+        return scores
+
+    def partition_groups(
+        self,
+        candidates: Sequence[str],
+        guess: str,
+    ) -> list[tuple[str, ...]]:
+        """Group candidates by feedback pattern; each group is a sorted word tuple."""
+        if not candidates:
+            return []
+
+        try:
+            import numpy as np
+
+            guess_index = self._index[guess]
+            candidate_indices = self._candidate_indices(candidates)
+            patterns = self.as_matrix()[candidate_indices, guess_index]
+            order = np.argsort(patterns, kind="stable")
+            patterns_sorted = patterns[order]
+            indices_sorted = candidate_indices[order]
+            words = self.words
+
+            groups: list[tuple[str, ...]] = []
+            start = 0
+            for end in range(1, len(patterns_sorted) + 1):
+                if end == len(patterns_sorted) or patterns_sorted[end] != patterns_sorted[start]:
+                    bucket = tuple(sorted(words[index] for index in indices_sorted[start:end]))
+                    groups.append(bucket)
+                    start = end
+            return groups
+        except KeyError:
+            from collections import defaultdict
+
+            buckets: dict[int, list[str]] = defaultdict(list)
+            for candidate in candidates:
+                buckets[self.pattern(candidate, guess)].append(candidate)
+            return [tuple(sorted(bucket)) for bucket in buckets.values()]
+
     @classmethod
-    def build(cls, words: tuple[str, ...]) -> PatternTable:
+    def build(
+        cls,
+        words: tuple[str, ...],
+        *,
+        length: int = 5,
+        show_progress: bool = False,
+    ) -> PatternTable:
         """Compute the full secret × guess pattern matrix."""
         count = len(words)
         patterns = bytearray(count * count)
-        for secret_index, secret in enumerate(words):
+        rows = enumerate(words)
+        if show_progress:
+            from tqdm import tqdm
+
+            rows = tqdm(
+                list(enumerate(words)),
+                total=count,
+                desc=f"entropy_{length}_lookup_table",
+                unit=" rows",
+            )
+        for secret_index, secret in rows:
             row_offset = secret_index * count
             for guess_index, guess in enumerate(words):
                 patterns[row_offset + guess_index] = WordleEnv.pattern(secret, guess)
@@ -48,62 +164,3 @@ class PatternTable:
         except KeyError:
             return WordleEnv.pattern(secret, guess)
         return self._patterns[secret_index * len(self.words) + guess_index]
-
-
-class TableLookupPersistor:
-    """Build, cache, and load pattern lookup tables under ``data/``."""
-
-    def __init__(
-        self,
-        dictionary_path: Path | str,
-        length: int = 5,
-        *,
-        data_dir: Path | str | None = None,
-    ) -> None:
-        self.dictionary_path = Path(dictionary_path)
-        self.length = length
-        self.data_dir = (
-            Path(data_dir) if data_dir is not None else get_cache_dir(self.dictionary_path.parent)
-        )
-
-    def cache_path(self) -> Path:
-        """Path to the cached pattern table for this word length."""
-        return self.data_dir / f"word_{self.length}_dict.pickle"
-
-    def _source_mtime(self) -> float:
-        mtimes = [self.dictionary_path.stat().st_mtime]
-        words_cache = WordleWordsHandler(self.dictionary_path, length=self.length).cache_path()
-        if words_cache.is_file():
-            mtimes.append(words_cache.stat().st_mtime)
-        return max(mtimes)
-
-    def _load_from_cache(self) -> PatternTable | None:
-        cache = self.cache_path()
-        if not cache.is_file() or not self.dictionary_path.is_file():
-            return None
-        if cache.stat().st_mtime < self._source_mtime():
-            return None
-        try:
-            with cache.open("rb") as handle:
-                table = pickle.load(handle)
-        except (pickle.UnpicklingError, ModuleNotFoundError, AttributeError):
-            return None
-        if not isinstance(table, PatternTable):
-            return None
-        return table
-
-    def _save_cache(self, table: PatternTable) -> None:
-        self.data_dir.mkdir(parents=True, exist_ok=True)
-        with self.cache_path().open("wb") as handle:
-            pickle.dump(table, handle, protocol=pickle.HIGHEST_PROTOCOL)
-
-    def load(self) -> PatternTable:
-        """Load the pattern table, building and caching it when needed."""
-        words = WordleWordsHandler(self.dictionary_path, length=self.length).load().words
-        cached = self._load_from_cache()
-        if cached is not None and cached.words == words:
-            return cached
-
-        table = PatternTable.build(words)
-        self._save_cache(table)
-        return table

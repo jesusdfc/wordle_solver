@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import type { AppMode } from "./types";
-import { BenchmarkScreen } from "./components/BenchmarkScreen";
+import { ExploreScreen } from "./components/ExploreScreen";
 import { MenuScreen } from "./components/MenuScreen";
 import { PlayScreen } from "./components/PlayScreen";
 
@@ -12,11 +12,11 @@ export default function App() {
     return <PlayScreen onBack={() => setMode("menu")} />;
   }
 
-  if (mode === "benchmark") {
-    return <BenchmarkScreen onBack={() => setMode("menu")} />;
+  if (mode === "explore") {
+    return <ExploreScreen onBack={() => setMode("menu")} />;
   }
 
   return (
-    <MenuScreen onPlay={() => setMode("play")} onBenchmark={() => setMode("benchmark")} />
+    <MenuScreen onPlay={() => setMode("play")} onExplore={() => setMode("explore")} />
   );
 }

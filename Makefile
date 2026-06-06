@@ -1,4 +1,4 @@
-.PHONY: checks test backend frontend
+.PHONY: checks test backend frontend benchmark
 
 checks:
 	cd solver && uv sync --all-extras --quiet
@@ -13,3 +13,7 @@ backend:
 
 frontend:
 	cd frontend && npm run dev
+
+benchmark:
+	cd solver && uv sync --extra benchmark --quiet
+	cd solver && uv run palabra benchmark

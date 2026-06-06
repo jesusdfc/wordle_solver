@@ -1,0 +1,3214 @@
+{
+  "dictionary_size": 5019,
+  "num_secrets": 100,
+  "secrets_played": 100,
+  "benchmark_words_path": "C:\\Users\\l3274\\Documents\\Projects\\Wordle\\data\\benchmark_words.json",
+  "benchmark_words": [
+    "acose",
+    "aloes",
+    "alzar",
+    "ampon",
+    "andar",
+    "andel",
+    "arido",
+    "arria",
+    "azala",
+    "barza",
+    "beata",
+    "bello",
+    "bocal",
+    "bocoy",
+    "brama",
+    "bucle",
+    "bufet",
+    "burio",
+    "cahiz",
+    "calan",
+    "calar",
+    "cargo",
+    "cesio",
+    "cigua",
+    "clara",
+    "corco",
+    "coxal",
+    "croto",
+    "cruor",
+    "curil",
+    "dupla",
+    "epoto",
+    "fario",
+    "fator",
+    "felon",
+    "fetal",
+    "fillo",
+    "finta",
+    "fisga",
+    "flote",
+    "foton",
+    "fresa",
+    "fulla",
+    "fumon",
+    "gluma",
+    "gneis",
+    "gomel",
+    "hampa",
+    "hapax",
+    "hecho",
+    "henal",
+    "hielo",
+    "hoyar",
+    "huiro",
+    "hular",
+    "hulla",
+    "jarca",
+    "jijeo",
+    "leudo",
+    "liaza",
+    "llena",
+    "malon",
+    "mapeo",
+    "maure",
+    "mirla",
+    "mofar",
+    "monga",
+    "morse",
+    "muria",
+    "negra",
+    "nenia",
+    "neuma",
+    "neura",
+    "okapi",
+    "orujo",
+    "pavia",
+    "pegon",
+    "pelde",
+    "prear",
+    "pugil",
+    "quico",
+    "quilo",
+    "radal",
+    "sampa",
+    "seise",
+    "tapis",
+    "tarso",
+    "tibar",
+    "tibio",
+    "tocio",
+    "torga",
+    "trapo",
+    "traro",
+    "tuani",
+    "usier",
+    "vinar",
+    "virio",
+    "yunga",
+    "zagal",
+    "zonal"
+  ],
+  "max_guesses": 6,
+  "persist": true,
+  "fixed_opener": "acero",
+  "strategies": [
+    {
+      "strategy": "full-entropy",
+      "report_key": "full-entropy",
+      "label": "Full entropy",
+      "first_word": "cario",
+      "hard": "no",
+      "threshold": "\u2014",
+      "probes": "full dict",
+      "count": 100,
+      "solve_rate": 1.0,
+      "mean_guesses": 4.11,
+      "mean_guesses_solved": 4.11,
+      "elapsed_seconds": 25.664,
+      "games": [
+        {
+          "secret": "acose",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "aloes",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "alzar",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "ampon",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "andar",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "andel",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "arido",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "arria",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "azala",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "barza",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "beata",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "bello",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "bocal",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "bocoy",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "brama",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "bucle",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "bufet",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "burio",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "cahiz",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "calan",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "calar",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "cargo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "cesio",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "cigua",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "clara",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "corco",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "coxal",
+          "guesses": 6,
+          "solved": true
+        },
+        {
+          "secret": "croto",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "cruor",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "curil",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "dupla",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "epoto",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "fario",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "fator",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "felon",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "fetal",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "fillo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "finta",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "fisga",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "flote",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "foton",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "fresa",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "fulla",
+          "guesses": 6,
+          "solved": true
+        },
+        {
+          "secret": "fumon",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "gluma",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "gneis",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "gomel",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "hampa",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "hapax",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "hecho",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "henal",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "hielo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "hoyar",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "huiro",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "hular",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "hulla",
+          "guesses": 6,
+          "solved": true
+        },
+        {
+          "secret": "jarca",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "jijeo",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "leudo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "liaza",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "llena",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "malon",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "mapeo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "maure",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "mirla",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "mofar",
+          "guesses": 6,
+          "solved": true
+        },
+        {
+          "secret": "monga",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "morse",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "muria",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "negra",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "nenia",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "neuma",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "neura",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "okapi",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "orujo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "pavia",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "pegon",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "pelde",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "prear",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "pugil",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "quico",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "quilo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "radal",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "sampa",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "seise",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "tapis",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "tarso",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "tibar",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "tibio",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "tocio",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "torga",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "trapo",
+          "guesses": 6,
+          "solved": true
+        },
+        {
+          "secret": "traro",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "tuani",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "usier",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "vinar",
+          "guesses": 6,
+          "solved": true
+        },
+        {
+          "secret": "virio",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "yunga",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "zagal",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "zonal",
+          "guesses": 4,
+          "solved": true
+        }
+      ]
+    },
+    {
+      "strategy": "fixed-entropy",
+      "report_key": "fixed-entropy",
+      "label": "Fixed + entropy",
+      "first_word": "acero",
+      "hard": "no",
+      "threshold": "\u2014",
+      "probes": "full dict",
+      "count": 100,
+      "solve_rate": 0.99,
+      "mean_guesses": 4.11,
+      "mean_guesses_solved": 4.090909090909091,
+      "elapsed_seconds": 6.588,
+      "games": [
+        {
+          "secret": "acose",
+          "guesses": 2,
+          "solved": true
+        },
+        {
+          "secret": "aloes",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "alzar",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "ampon",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "andar",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "andel",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "arido",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "arria",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "azala",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "barza",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "beata",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "bello",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "bocal",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "bocoy",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "brama",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "bucle",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "bufet",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "burio",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "cahiz",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "calan",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "calar",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "cargo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "cesio",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "cigua",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "clara",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "corco",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "coxal",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "croto",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "cruor",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "curil",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "dupla",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "epoto",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "fario",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "fator",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "felon",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "fetal",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "fillo",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "finta",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "fisga",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "flote",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "foton",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "fresa",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "fulla",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "fumon",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "gluma",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "gneis",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "gomel",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "hampa",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "hapax",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "hecho",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "henal",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "hielo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "hoyar",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "huiro",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "hular",
+          "guesses": 6,
+          "solved": true
+        },
+        {
+          "secret": "hulla",
+          "guesses": 6,
+          "solved": true
+        },
+        {
+          "secret": "jarca",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "jijeo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "leudo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "liaza",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "llena",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "malon",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "mapeo",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "maure",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "mirla",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "mofar",
+          "guesses": 6,
+          "solved": true
+        },
+        {
+          "secret": "monga",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "morse",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "muria",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "negra",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "nenia",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "neuma",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "neura",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "okapi",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "orujo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "pavia",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "pegon",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "pelde",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "prear",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "pugil",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "quico",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "quilo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "radal",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "sampa",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "seise",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "tapis",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "tarso",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "tibar",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "tibio",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "tocio",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "torga",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "trapo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "traro",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "tuani",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "usier",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "vinar",
+          "guesses": 6,
+          "solved": false
+        },
+        {
+          "secret": "virio",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "yunga",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "zagal",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "zonal",
+          "guesses": 4,
+          "solved": true
+        }
+      ]
+    },
+    {
+      "strategy": "entropy-threshold-bellman",
+      "report_key": "entropy-threshold-bellman@20",
+      "label": "Entropy + threshold Bellman",
+      "first_word": "cario",
+      "hard": "no",
+      "threshold": "20",
+      "probes": "full dict",
+      "belief_threshold": 20,
+      "count": 100,
+      "solve_rate": 1.0,
+      "mean_guesses": 3.95,
+      "mean_guesses_solved": 3.95,
+      "elapsed_seconds": 1589.149,
+      "games": [
+        {
+          "secret": "acose",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "aloes",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "alzar",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "ampon",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "andar",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "andel",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "arido",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "arria",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "azala",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "barza",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "beata",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "bello",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "bocal",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "bocoy",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "brama",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "bucle",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "bufet",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "burio",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "cahiz",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "calan",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "calar",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "cargo",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "cesio",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "cigua",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "clara",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "corco",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "coxal",
+          "guesses": 6,
+          "solved": true
+        },
+        {
+          "secret": "croto",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "cruor",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "curil",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "dupla",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "epoto",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "fario",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "fator",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "felon",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "fetal",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "fillo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "finta",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "fisga",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "flote",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "foton",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "fresa",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "fulla",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "fumon",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "gluma",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "gneis",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "gomel",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "hampa",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "hapax",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "hecho",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "henal",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "hielo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "hoyar",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "huiro",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "hular",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "hulla",
+          "guesses": 6,
+          "solved": true
+        },
+        {
+          "secret": "jarca",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "jijeo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "leudo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "liaza",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "llena",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "malon",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "mapeo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "maure",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "mirla",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "mofar",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "monga",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "morse",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "muria",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "negra",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "nenia",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "neuma",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "neura",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "okapi",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "orujo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "pavia",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "pegon",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "pelde",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "prear",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "pugil",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "quico",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "quilo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "radal",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "sampa",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "seise",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "tapis",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "tarso",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "tibar",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "tibio",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "tocio",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "torga",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "trapo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "traro",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "tuani",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "usier",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "vinar",
+          "guesses": 6,
+          "solved": true
+        },
+        {
+          "secret": "virio",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "yunga",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "zagal",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "zonal",
+          "guesses": 4,
+          "solved": true
+        }
+      ]
+    },
+    {
+      "strategy": "entropy-hard-bellman",
+      "report_key": "entropy-hard-bellman@20",
+      "label": "Entropy + hard Bellman",
+      "first_word": "cario",
+      "hard": "yes",
+      "threshold": "20",
+      "probes": "candidates only",
+      "belief_threshold": 20,
+      "count": 100,
+      "solve_rate": 0.97,
+      "mean_guesses": 4.0,
+      "mean_guesses_solved": 3.9381443298969074,
+      "elapsed_seconds": 22.569,
+      "games": [
+        {
+          "secret": "acose",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "aloes",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "alzar",
+          "guesses": 6,
+          "solved": true
+        },
+        {
+          "secret": "ampon",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "andar",
+          "guesses": 6,
+          "solved": true
+        },
+        {
+          "secret": "andel",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "arido",
+          "guesses": 2,
+          "solved": true
+        },
+        {
+          "secret": "arria",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "azala",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "barza",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "beata",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "bello",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "bocal",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "bocoy",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "brama",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "bucle",
+          "guesses": 2,
+          "solved": true
+        },
+        {
+          "secret": "bufet",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "burio",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "cahiz",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "calan",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "calar",
+          "guesses": 2,
+          "solved": true
+        },
+        {
+          "secret": "cargo",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "cesio",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "cigua",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "clara",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "corco",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "coxal",
+          "guesses": 6,
+          "solved": false
+        },
+        {
+          "secret": "croto",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "cruor",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "curil",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "dupla",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "epoto",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "fario",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "fator",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "felon",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "fetal",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "fillo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "finta",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "fisga",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "flote",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "foton",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "fresa",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "fulla",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "fumon",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "gluma",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "gneis",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "gomel",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "hampa",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "hapax",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "hecho",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "henal",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "hielo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "hoyar",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "huiro",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "hular",
+          "guesses": 6,
+          "solved": true
+        },
+        {
+          "secret": "hulla",
+          "guesses": 6,
+          "solved": true
+        },
+        {
+          "secret": "jarca",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "jijeo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "leudo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "liaza",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "llena",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "malon",
+          "guesses": 6,
+          "solved": false
+        },
+        {
+          "secret": "mapeo",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "maure",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "mirla",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "mofar",
+          "guesses": 6,
+          "solved": true
+        },
+        {
+          "secret": "monga",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "morse",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "muria",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "negra",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "nenia",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "neuma",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "neura",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "okapi",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "orujo",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "pavia",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "pegon",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "pelde",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "prear",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "pugil",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "quico",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "quilo",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "radal",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "sampa",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "seise",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "tapis",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "tarso",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "tibar",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "tibio",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "tocio",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "torga",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "trapo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "traro",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "tuani",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "usier",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "vinar",
+          "guesses": 6,
+          "solved": false
+        },
+        {
+          "secret": "virio",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "yunga",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "zagal",
+          "guesses": 6,
+          "solved": true
+        },
+        {
+          "secret": "zonal",
+          "guesses": 4,
+          "solved": true
+        }
+      ]
+    },
+    {
+      "strategy": "entropy-hard-bellman",
+      "report_key": "entropy-hard-bellman@50",
+      "label": "Entropy + hard Bellman",
+      "first_word": "cario",
+      "hard": "yes",
+      "threshold": "50",
+      "probes": "candidates only",
+      "belief_threshold": 50,
+      "count": 100,
+      "solve_rate": 0.96,
+      "mean_guesses": 4.09,
+      "mean_guesses_solved": 4.010416666666667,
+      "elapsed_seconds": 24.237,
+      "games": [
+        {
+          "secret": "acose",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "aloes",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "alzar",
+          "guesses": 6,
+          "solved": true
+        },
+        {
+          "secret": "ampon",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "andar",
+          "guesses": 6,
+          "solved": true
+        },
+        {
+          "secret": "andel",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "arido",
+          "guesses": 2,
+          "solved": true
+        },
+        {
+          "secret": "arria",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "azala",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "barza",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "beata",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "bello",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "bocal",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "bocoy",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "brama",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "bucle",
+          "guesses": 2,
+          "solved": true
+        },
+        {
+          "secret": "bufet",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "burio",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "cahiz",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "calan",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "calar",
+          "guesses": 2,
+          "solved": true
+        },
+        {
+          "secret": "cargo",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "cesio",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "cigua",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "clara",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "corco",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "coxal",
+          "guesses": 6,
+          "solved": false
+        },
+        {
+          "secret": "croto",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "cruor",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "curil",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "dupla",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "epoto",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "fario",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "fator",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "felon",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "fetal",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "fillo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "finta",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "fisga",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "flote",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "foton",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "fresa",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "fulla",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "fumon",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "gluma",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "gneis",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "gomel",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "hampa",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "hapax",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "hecho",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "henal",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "hielo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "hoyar",
+          "guesses": 6,
+          "solved": false
+        },
+        {
+          "secret": "huiro",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "hular",
+          "guesses": 6,
+          "solved": true
+        },
+        {
+          "secret": "hulla",
+          "guesses": 6,
+          "solved": true
+        },
+        {
+          "secret": "jarca",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "jijeo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "leudo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "liaza",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "llena",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "malon",
+          "guesses": 6,
+          "solved": false
+        },
+        {
+          "secret": "mapeo",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "maure",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "mirla",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "mofar",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "monga",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "morse",
+          "guesses": 6,
+          "solved": true
+        },
+        {
+          "secret": "muria",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "negra",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "nenia",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "neuma",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "neura",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "okapi",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "orujo",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "pavia",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "pegon",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "pelde",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "prear",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "pugil",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "quico",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "quilo",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "radal",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "sampa",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "seise",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "tapis",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "tarso",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "tibar",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "tibio",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "tocio",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "torga",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "trapo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "traro",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "tuani",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "usier",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "vinar",
+          "guesses": 6,
+          "solved": false
+        },
+        {
+          "secret": "virio",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "yunga",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "zagal",
+          "guesses": 6,
+          "solved": true
+        },
+        {
+          "secret": "zonal",
+          "guesses": 4,
+          "solved": true
+        }
+      ]
+    },
+    {
+      "strategy": "entropy-hard-bellman",
+      "report_key": "entropy-hard-bellman@100",
+      "label": "Entropy + hard Bellman",
+      "first_word": "cario",
+      "hard": "yes",
+      "threshold": "100",
+      "probes": "candidates only",
+      "belief_threshold": 100,
+      "count": 100,
+      "solve_rate": 0.96,
+      "mean_guesses": 4.08,
+      "mean_guesses_solved": 4.0,
+      "elapsed_seconds": 42.747,
+      "games": [
+        {
+          "secret": "acose",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "aloes",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "alzar",
+          "guesses": 6,
+          "solved": true
+        },
+        {
+          "secret": "ampon",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "andar",
+          "guesses": 6,
+          "solved": true
+        },
+        {
+          "secret": "andel",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "arido",
+          "guesses": 2,
+          "solved": true
+        },
+        {
+          "secret": "arria",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "azala",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "barza",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "beata",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "bello",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "bocal",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "bocoy",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "brama",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "bucle",
+          "guesses": 2,
+          "solved": true
+        },
+        {
+          "secret": "bufet",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "burio",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "cahiz",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "calan",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "calar",
+          "guesses": 2,
+          "solved": true
+        },
+        {
+          "secret": "cargo",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "cesio",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "cigua",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "clara",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "corco",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "coxal",
+          "guesses": 6,
+          "solved": false
+        },
+        {
+          "secret": "croto",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "cruor",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "curil",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "dupla",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "epoto",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "fario",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "fator",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "felon",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "fetal",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "fillo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "finta",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "fisga",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "flote",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "foton",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "fresa",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "fulla",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "fumon",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "gluma",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "gneis",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "gomel",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "hampa",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "hapax",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "hecho",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "henal",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "hielo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "hoyar",
+          "guesses": 6,
+          "solved": false
+        },
+        {
+          "secret": "huiro",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "hular",
+          "guesses": 6,
+          "solved": true
+        },
+        {
+          "secret": "hulla",
+          "guesses": 6,
+          "solved": true
+        },
+        {
+          "secret": "jarca",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "jijeo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "leudo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "liaza",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "llena",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "malon",
+          "guesses": 6,
+          "solved": false
+        },
+        {
+          "secret": "mapeo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "maure",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "mirla",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "mofar",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "monga",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "morse",
+          "guesses": 6,
+          "solved": true
+        },
+        {
+          "secret": "muria",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "negra",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "nenia",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "neuma",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "neura",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "okapi",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "orujo",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "pavia",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "pegon",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "pelde",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "prear",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "pugil",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "quico",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "quilo",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "radal",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "sampa",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "seise",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "tapis",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "tarso",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "tibar",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "tibio",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "tocio",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "torga",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "trapo",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "traro",
+          "guesses": 3,
+          "solved": true
+        },
+        {
+          "secret": "tuani",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "usier",
+          "guesses": 4,
+          "solved": true
+        },
+        {
+          "secret": "vinar",
+          "guesses": 6,
+          "solved": false
+        },
+        {
+          "secret": "virio",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "yunga",
+          "guesses": 5,
+          "solved": true
+        },
+        {
+          "secret": "zagal",
+          "guesses": 6,
+          "solved": true
+        },
+        {
+          "secret": "zonal",
+          "guesses": 4,
+          "solved": true
+        }
+      ]
+    }
+  ],
+  "elapsed_seconds": 1632.65
+}

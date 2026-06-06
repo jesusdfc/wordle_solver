@@ -2,10 +2,10 @@ import { ScreenLayout } from "./ScreenLayout";
 
 type MenuScreenProps = {
   onPlay: () => void;
-  onBenchmark: () => void;
+  onExplore: () => void;
 };
 
-export function MenuScreen({ onPlay, onBenchmark }: MenuScreenProps) {
+export function MenuScreen({ onPlay, onExplore }: MenuScreenProps) {
   return (
     <ScreenLayout
       title="Spanish Wordle Solver"
@@ -27,12 +27,12 @@ export function MenuScreen({ onPlay, onBenchmark }: MenuScreenProps) {
           </span>
         </button>
 
-        <button type="button" className="menu-btn menu-btn-benchmark" onClick={onBenchmark}>
+        <button type="button" className="menu-btn menu-btn-explore" onClick={onExplore}>
           <span className="menu-btn-icon" aria-hidden="true">
             ◷
           </span>
           <span className="menu-btn-text">
-            <strong>Benchmark</strong>
+            <strong>Explore</strong>
             <small>Simula la ruta del solver contra un secreto</small>
           </span>
         </button>

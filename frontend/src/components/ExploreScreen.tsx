@@ -1,23 +1,26 @@
 import { useEffect, useState } from "react";
 
-import { fetchBenchmark } from "../api/client";
-import type { BenchmarkResponse } from "../types";
+import { fetchExplore } from "../api/client";
+import type { ExploreResponse, SolverStrategy } from "../types";
 import { Board } from "./Board";
 import { ScreenLayout } from "./ScreenLayout";
+import { StrategySelector } from "./StrategySelector";
 
 const ROW_REVEAL_MS = 320;
 
-type BenchmarkScreenProps = {
+type ExploreScreenProps = {
   onBack: () => void;
 };
 
-export function BenchmarkScreen({ onBack }: BenchmarkScreenProps) {
+export function ExploreScreen({ onBack }: ExploreScreenProps) {
   const [secretInput, setSecretInput] = useState("");
-  const [result, setResult] = useState<BenchmarkResponse | null>(null);
+  const [result, setResult] = useState<ExploreResponse | null>(null);
   const [visibleRows, setVisibleRows] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [animating, setAnimating] = useState(false);
+  const [strategy, setStrategy] = useState<SolverStrategy>("entropy-threshold-bellman");
+  const [openingWord, setOpeningWord] = useState("cario");
 
   useEffect(() => {
     if (!result || result.guesses.length === 0) {
@@ -54,7 +57,10 @@ export function BenchmarkScreen({ onBack }: BenchmarkScreenProps) {
 
     setLoading(true);
     try {
-      const response = await fetchBenchmark(trimmed);
+      const response = await fetchExplore(trimmed, {
+        strategy,
+        openingWord: openingWord || undefined,
+      });
       setResult(response);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unknown error");
@@ -72,14 +78,22 @@ export function BenchmarkScreen({ onBack }: BenchmarkScreenProps) {
   };
 
   const showOutcome = result && !animating && visibleRows >= result.guesses.length;
+  const strategyLocked = loading || result !== null;
 
   return (
     <ScreenLayout
-      title="Benchmark"
+      title="Explore"
       subtitle="Introduce un secreto de 5 letras y observa cómo lo resuelve el solver."
-      badge="entropy"
+      badge={strategy}
       onBack={onBack}
     >
+      <StrategySelector
+        value={strategy}
+        onChange={setStrategy}
+        openingWord={openingWord}
+        onOpeningWordChange={setOpeningWord}
+        disabled={strategyLocked}
+      />
       {result && (
         <div className="secret-display">
           <span className="secret-label">Secreto</span>
@@ -88,7 +102,7 @@ export function BenchmarkScreen({ onBack }: BenchmarkScreenProps) {
       )}
 
       {!result && (
-        <section className="benchmark-input">
+        <section className="explore-input">
           <label className="secret-field-label" htmlFor="secret-input">
             Palabra secreta
           </label>
@@ -107,7 +121,7 @@ export function BenchmarkScreen({ onBack }: BenchmarkScreenProps) {
       )}
 
       {result && (
-        <section className="board-section benchmark-board">
+        <section className="board-section explore-board">
           <div className="history" aria-label="Ruta del solver">
             {result.guesses.slice(0, visibleRows).map((row, index) => (
               <div key={index} className="board-row-reveal">
@@ -121,7 +135,7 @@ export function BenchmarkScreen({ onBack }: BenchmarkScreenProps) {
       <section className="actions">
         {!result ? (
           <button type="button" className="btn btn-primary" onClick={handleRun} disabled={loading}>
-            {loading ? "Calculando…" : "Benchmark"}
+            {loading ? "Calculando…" : "Explorar"}
           </button>
         ) : (
           <button type="button" className="btn btn-secondary" onClick={handleReset} disabled={animating}>

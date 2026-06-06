@@ -8,7 +8,7 @@ import unicodedata
 from collections.abc import Callable, Iterator
 from pathlib import Path
 
-from solver.data.cache import get_cache_dir
+from solver.data.cache.base import get_cache_dir
 
 _DISALLOWED_RE = re.compile(r"[\s\-0-9'\".,;:/\\()[\]{}]")
 _VALID_CHARS_RE = re.compile(r"^[a-zñ]+$")

@@ -1,4 +1,10 @@
-import type { BenchmarkResponse, HistoryRow, SuggestResponse } from "../types";
+import type {
+  ExploreResponse,
+  HistoryRow,
+  StrategyInfo,
+  SuggestOptions,
+  SuggestResponse,
+} from "../types";
 
 const API_BASE = (import.meta.env.VITE_API_URL ?? "").replace(/\/$/, "");
 
@@ -13,11 +19,29 @@ function parseErrorDetail(body: { detail?: string | { msg: string }[] }): string
   return "Request failed";
 }
 
-export async function fetchSuggestion(history: HistoryRow[]): Promise<SuggestResponse> {
+export async function fetchStrategies(): Promise<StrategyInfo[]> {
+  const response = await fetch(apiUrl("/api/strategies"));
+  if (!response.ok) {
+    const body = await response.json().catch(() => ({}));
+    throw new Error(parseErrorDetail(body));
+  }
+  return response.json();
+}
+
+export async function fetchSuggestion(
+  history: HistoryRow[],
+  options: SuggestOptions,
+): Promise<SuggestResponse> {
+  const { strategy, openingWord } = options;
   const response = await fetch(apiUrl("/api/suggest"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ history, length: 5 }),
+    body: JSON.stringify({
+      history,
+      length: 5,
+      strategy,
+      opening_word: openingWord ?? null,
+    }),
   });
 
   if (!response.ok) {
@@ -28,11 +52,21 @@ export async function fetchSuggestion(history: HistoryRow[]): Promise<SuggestRes
   return response.json();
 }
 
-export async function fetchBenchmark(secret: string): Promise<BenchmarkResponse> {
-  const response = await fetch(apiUrl("/api/benchmark"), {
+export async function fetchExplore(
+  secret: string,
+  options: SuggestOptions,
+): Promise<ExploreResponse> {
+  const { strategy, openingWord } = options;
+  const response = await fetch(apiUrl("/api/explore"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ secret, length: 5, max_guesses: 6 }),
+    body: JSON.stringify({
+      secret,
+      length: 5,
+      max_guesses: 6,
+      strategy,
+      opening_word: openingWord ?? null,
+    }),
   });
 
   if (!response.ok) {
