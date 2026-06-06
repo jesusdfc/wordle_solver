@@ -1,11 +1,8 @@
+import { Link } from "react-router-dom";
+
 import { ScreenLayout } from "./ScreenLayout";
 
-type MenuScreenProps = {
-  onPlay: () => void;
-  onExplore: () => void;
-};
-
-export function MenuScreen({ onPlay, onExplore }: MenuScreenProps) {
+export function MenuScreen() {
   return (
     <ScreenLayout
       title="Spanish Wordle Solver"
@@ -14,10 +11,9 @@ export function MenuScreen({ onPlay, onExplore }: MenuScreenProps) {
           Asistente óptimo para <strong>La Palabra del Día</strong>. Elige un modo para empezar.
         </>
       }
-      badge="entropy"
     >
       <nav className="menu-actions" aria-label="Modos">
-        <button type="button" className="menu-btn menu-btn-play" onClick={onPlay}>
+        <Link to="/play" className="menu-btn menu-btn-play">
           <span className="menu-btn-icon" aria-hidden="true">
             ▶
           </span>
@@ -25,9 +21,9 @@ export function MenuScreen({ onPlay, onExplore }: MenuScreenProps) {
             <strong>Play</strong>
             <small>Marca colores y pide sugerencias en vivo</small>
           </span>
-        </button>
+        </Link>
 
-        <button type="button" className="menu-btn menu-btn-explore" onClick={onExplore}>
+        <Link to="/explore" className="menu-btn menu-btn-explore">
           <span className="menu-btn-icon" aria-hidden="true">
             ◷
           </span>
@@ -35,7 +31,7 @@ export function MenuScreen({ onPlay, onExplore }: MenuScreenProps) {
             <strong>Explore</strong>
             <small>Simula la ruta del solver contra un secreto</small>
           </span>
-        </button>
+        </Link>
       </nav>
     </ScreenLayout>
   );

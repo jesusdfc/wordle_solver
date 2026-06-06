@@ -26,6 +26,9 @@ class TestWordleStrategies:
         )
         assert threshold["warning"]
         assert threshold["belief_threshold"] == 20
+        assert threshold["highlight"] == "best"
+        fast = next(item for item in items if item["id"] == "entropy-hard-bellman@50")
+        assert fast["highlight"] == "fast"
 
     def test_hard_bellman_threshold_variants(self) -> None:
         for threshold in (20, 50, 100):

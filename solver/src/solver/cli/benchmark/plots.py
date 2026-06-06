@@ -8,7 +8,6 @@ from typing import Any
 
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
-from matplotlib.table import Table
 
 from solver.cli.benchmark.cache import load_results, results_path
 from solver.cli.benchmark.config import PLOT_FILENAME, STRATEGY_COLORS
@@ -17,18 +16,7 @@ from solver.cli.benchmark.labels import stats_plot_label
 _GRID_COLOR = "#d8dee9"
 _AXIS_COLOR = "#4c566a"
 _HEADER_BG = "#2e3440"
-_HEADER_FG = "#eceff4"
-_ROW_EVEN = "#f8f9fb"
-_ROW_ODD = "#ffffff"
-_TABLE_EDGE = "#cbd5e1"
 _MIN_LOG_TIME = 0.01
-
-
-def _opening_word_table(strategies: list[dict[str, Any]]) -> list[list[str]]:
-    return [
-        [stats_plot_label(stats), stats.get("first_word", "")]
-        for stats in strategies
-    ]
 
 
 def _style_bar_axes(ax: plt.Axes) -> None:
@@ -49,29 +37,6 @@ def _log_time_floor(times: list[float]) -> float:
     if not positive:
         return _MIN_LOG_TIME
     return max(min(positive) / 10, _MIN_LOG_TIME)
-
-
-def _style_table(table: Table, *, colors: tuple[str, ...]) -> None:
-    table.auto_set_font_size(False)
-    table.set_fontsize(8)
-    table.scale(1.0, 1.55)
-
-    for (row, col), cell in table.get_celld().items():
-        cell.set_edgecolor(_TABLE_EDGE)
-        cell.set_linewidth(0.9)
-        cell.set_height(0.12)
-
-        if row == 0:
-            cell.set_facecolor(_HEADER_BG)
-            cell.set_text_props(color=_HEADER_FG, weight="bold", fontsize=8)
-            continue
-
-        cell.set_facecolor(_ROW_EVEN if row % 2 == 0 else _ROW_ODD)
-        if col == 0:
-            color = colors[(row - 1) % len(colors)]
-            cell.set_text_props(color=color, weight="bold", fontsize=7.5)
-        elif col == 1:
-            cell.set_text_props(family="monospace", fontsize=8, weight="medium")
 
 
 def _strategy_entries(strategies: list[dict[str, Any]]) -> list[tuple[int, dict[str, Any], str]]:
@@ -176,42 +141,24 @@ def plot_benchmark(
     secrets_played = summary["secrets_played"]
     entries = _strategy_entries(strategies)
 
-    fig, (ax_means, ax_times, ax_table) = plt.subplots(
+    fig, (ax_means, ax_times) = plt.subplots(
+        2,
         1,
-        3,
-        figsize=(max(15, len(strategies) * 4.2), 5.2),
+        figsize=(max(9, len(strategies) * 1.4), 8.5),
     )
     fig.patch.set_facecolor("#ffffff")
 
     _plot_mean_guesses(ax_means, _sorted_for_means(entries))
     _plot_wall_clock(ax_times, _sorted_for_times(entries))
 
-    table_colors = [color for _, _, color in entries]
-    ax_table.axis("off")
-    table = ax_table.table(
-        cellText=_opening_word_table(strategies),
-        colLabels=["Strategy", "Opening word"],
-        loc="center",
-        cellLoc="center",
-        bbox=[0.02, 0.08, 0.96, 0.84],
-    )
-    _style_table(table, colors=tuple(table_colors))
-    ax_table.set_title(
-        "Opening words",
-        fontsize=11,
-        fontweight="bold",
-        color=_HEADER_BG,
-        pad=12,
-    )
-
     fig.suptitle(
         f"Strategy benchmark ({secrets_played} secrets played)",
         fontsize=13,
         fontweight="bold",
         color=_HEADER_BG,
-        y=1.01,
+        y=0.98,
     )
-    fig.tight_layout()
+    fig.tight_layout(rect=(0, 0, 1, 0.96))
 
     plot_path = output_dir / PLOT_FILENAME
     fig.savefig(plot_path, dpi=150, bbox_inches="tight", facecolor=fig.get_facecolor())

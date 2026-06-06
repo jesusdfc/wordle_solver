@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { fetchSuggestion } from "../api/client";
 import type { HistoryRow, SolverStrategy, TileColor } from "../types";
@@ -9,11 +10,8 @@ import { StrategySelector } from "./StrategySelector";
 const EMPTY_PATTERN: TileColor[] = [0, 0, 0, 0, 0];
 const MAX_GUESSES = 6;
 
-type PlayScreenProps = {
-  onBack: () => void;
-};
-
-export function PlayScreen({ onBack }: PlayScreenProps) {
+export function PlayScreen() {
+  const navigate = useNavigate();
   const [history, setHistory] = useState<HistoryRow[]>([]);
   const [currentWord, setCurrentWord] = useState("");
   const [currentPattern, setCurrentPattern] = useState<TileColor[]>([...EMPTY_PATTERN]);
@@ -89,7 +87,7 @@ export function PlayScreen({ onBack }: PlayScreenProps) {
         </>
       }
       badge={strategy}
-      onBack={onBack}
+      onBack={() => navigate("/")}
     >
       <StrategySelector
         value={strategy}

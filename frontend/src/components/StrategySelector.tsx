@@ -11,6 +11,19 @@ type StrategySelectorProps = {
   disabled?: boolean;
 };
 
+const HIGHLIGHT_LABELS: Record<NonNullable<StrategyInfo["highlight"]>, string> = {
+  best: "Best performant",
+  fast: "Faster",
+};
+
+function optionClassName(option: StrategyInfo, selected: boolean): string {
+  const classes = ["strategy-option"];
+  if (selected) classes.push("strategy-option-active");
+  if (option.highlight === "best") classes.push("strategy-option-highlight-best");
+  if (option.highlight === "fast") classes.push("strategy-option-highlight-fast");
+  return classes.join(" ");
+}
+
 export function StrategySelector({
   value,
   onChange,
@@ -45,26 +58,32 @@ export function StrategySelector({
       <span className="strategy-picker-label">Strategy</span>
       {loadError ? <p className="error-text">{loadError}</p> : null}
       <div className="strategy-picker-options">
-        {options.map((option) => (
-          <label
-            key={option.id}
-            className={`strategy-option${value === option.id ? " strategy-option-active" : ""}`}
-          >
-            <input
-              type="radio"
-              name="solver-strategy"
-              value={option.id}
-              checked={value === option.id}
-              disabled={disabled || options.length === 0}
-              onChange={() => onChange(option.id)}
-            />
-            <span className="strategy-option-name">{option.label}</span>
-            <span className="strategy-option-hint">{option.description}</span>
-            {option.warning ? (
-              <span className="strategy-option-warning">{option.warning}</span>
-            ) : null}
-          </label>
-        ))}
+        {options.map((option) => {
+          const isSelected = value === option.id;
+          const highlightLabel = option.highlight ? HIGHLIGHT_LABELS[option.highlight] : null;
+
+          return (
+            <label key={option.id} className={optionClassName(option, isSelected)}>
+              <input
+                type="radio"
+                name="solver-strategy"
+                value={option.id}
+                checked={isSelected}
+                disabled={disabled || options.length === 0}
+                onChange={() => onChange(option.id)}
+              />
+              <span className="strategy-option-header">
+                <span className="strategy-option-name">{option.label}</span>
+                {highlightLabel ? (
+                  <span className={`strategy-option-tag strategy-option-tag-${option.highlight}`}>
+                    {highlightLabel}
+                  </span>
+                ) : null}
+              </span>
+              <span className="strategy-option-hint">{option.description}</span>
+            </label>
+          );
+        })}
       </div>
       {selected?.warning && value === selected.id ? (
         <p className="strategy-warning-banner" role="status">

@@ -8,6 +8,7 @@ export type StrategyInfo = {
   default_opening_word: string | null;
   belief_threshold: number | null;
   warning: string | null;
+  highlight: "best" | "fast" | null;
 };
 
 export type TileColor = 0 | 1 | 2;
@@ -30,8 +31,6 @@ export type ExploreResponse = {
   solved: boolean;
   guess_count: number;
 };
-
-export type AppMode = "menu" | "play" | "explore";
 
 export type SuggestOptions = {
   strategy: SolverStrategy;

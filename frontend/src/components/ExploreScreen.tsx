@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { fetchExplore } from "../api/client";
 import type { ExploreResponse, SolverStrategy } from "../types";
@@ -8,11 +9,8 @@ import { StrategySelector } from "./StrategySelector";
 
 const ROW_REVEAL_MS = 320;
 
-type ExploreScreenProps = {
-  onBack: () => void;
-};
-
-export function ExploreScreen({ onBack }: ExploreScreenProps) {
+export function ExploreScreen() {
+  const navigate = useNavigate();
   const [secretInput, setSecretInput] = useState("");
   const [result, setResult] = useState<ExploreResponse | null>(null);
   const [visibleRows, setVisibleRows] = useState(0);
@@ -85,7 +83,7 @@ export function ExploreScreen({ onBack }: ExploreScreenProps) {
       title="Explore"
       subtitle="Introduce un secreto de 5 letras y observa cómo lo resuelve el solver."
       badge={strategy}
-      onBack={onBack}
+      onBack={() => navigate("/")}
     >
       <StrategySelector
         value={strategy}

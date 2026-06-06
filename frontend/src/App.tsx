@@ -1,22 +1,18 @@
-import { useState } from "react";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
-import type { AppMode } from "./types";
 import { ExploreScreen } from "./components/ExploreScreen";
 import { MenuScreen } from "./components/MenuScreen";
 import { PlayScreen } from "./components/PlayScreen";
 
 export default function App() {
-  const [mode, setMode] = useState<AppMode>("menu");
-
-  if (mode === "play") {
-    return <PlayScreen onBack={() => setMode("menu")} />;
-  }
-
-  if (mode === "explore") {
-    return <ExploreScreen onBack={() => setMode("menu")} />;
-  }
-
   return (
-    <MenuScreen onPlay={() => setMode("play")} onExplore={() => setMode("explore")} />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<MenuScreen />} />
+        <Route path="/play" element={<PlayScreen />} />
+        <Route path="/explore" element={<ExploreScreen />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
   );
 }

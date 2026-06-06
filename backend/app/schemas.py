@@ -68,3 +68,4 @@ class StrategyInfo(BaseModel):
     default_opening_word: str | None = None
     belief_threshold: int | None = None
     warning: str | None = None
+    highlight: str | None = None

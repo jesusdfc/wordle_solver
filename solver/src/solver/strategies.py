@@ -14,8 +14,7 @@ from solver.model.hybrid import OpenerHardBellmanModel, OpenerThresholdBellmanMo
 from solver.model.threshold_bellman import DEFAULT_BELIEF_THRESHOLD, ThresholdBellmanModel
 
 THRESHOLD_BELLMAN_WARNING = (
-    "Exact Bellman DP can be very slow on large belief sets — expect long waits "
-    "between suggestions when |B| is below the threshold."
+    "Can be very slow when |B| is below the threshold — expect long waits between suggestions."
 )
 
 
@@ -30,6 +29,7 @@ class StrategySpec:
     requires_opening_word: bool = False
     belief_threshold: int | None = None
     warning: str | None = None
+    highlight: str | None = None
 
 
 def parse_strategy_id(strategy_id: str) -> tuple[str, int | None]:
@@ -59,34 +59,29 @@ class WordleStrategies:
             id="full-entropy",
             base_id="full-entropy",
             label="Full entropy",
-            description="Maximize expected information on every guess (greedy).",
+            description="Greedy entropy every turn.",
         ),
         "fixed-entropy": StrategySpec(
             id="fixed-entropy",
             base_id="fixed-entropy",
             label="Fixed + entropy",
-            description="User-chosen opening word, then greedy entropy on every later guess.",
+            description="Fixed opener, then entropy.",
             requires_opening_word=True,
         ),
         "entropy-threshold-bellman": StrategySpec(
             id="entropy-threshold-bellman",
             base_id="entropy-threshold-bellman",
             label="Entropy + threshold Bellman",
-            description=(
-                "Entropy opening guess, then greedy entropy while |B| >= threshold "
-                "and exact Bellman DP when |B| < threshold."
-            ),
+            description="Entropy, then exact Bellman DP.",
             belief_threshold=DEFAULT_BELIEF_THRESHOLD,
             warning=THRESHOLD_BELLMAN_WARNING,
+            highlight="best",
         ),
         "entropy-hard-bellman": StrategySpec(
             id="entropy-hard-bellman",
             base_id="entropy-hard-bellman",
             label="Entropy + hard Bellman",
-            description=(
-                "Entropy opening guess, then greedy entropy while |B| >= threshold "
-                "and hard-mode Bellman (probe from candidates only) when |B| < threshold."
-            ),
+            description="Entropy, then hard-mode Bellman.",
             belief_threshold=DEFAULT_BELIEF_THRESHOLD,
         ),
     }
@@ -109,6 +104,7 @@ class WordleStrategies:
                     label=f"{base.label} ({threshold})",
                     description=base.description,
                     belief_threshold=threshold,
+                    highlight="fast" if threshold == 50 else None,
                 )
             )
         return tuple(items)
@@ -154,6 +150,7 @@ class WordleStrategies:
                 ),
                 "belief_threshold": spec.belief_threshold,
                 "warning": spec.warning,
+                "highlight": spec.highlight,
             }
             for spec in cls._catalog()
         ]

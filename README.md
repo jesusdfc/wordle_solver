@@ -21,14 +21,49 @@ The web app and CLI expose the same six strategies benchmarked below. **Threshol
 
 ![Strategy benchmark](outputs/benchmark.png)
 
-| Strategy | Mean guesses | Wall time (s) | Solve rate |
-|----------|-------------:|--------------:|-----------:|
-| Full entropy | 4.11 | 25.7 | 100% |
-| Fixed + entropy (`acero`) | 4.11 | 6.6 | 100% |
-| Entropy + threshold Bellman (20) | **3.95** | **1589** | 100% |
-| Entropy + hard Bellman (20) | 4.00 | 22.6 | 100% |
-| Entropy + hard Bellman (50) | 4.09 | 24.2 | 100% |
-| Entropy + hard Bellman (100) | 4.08 | 42.7 | 100% |
+<table>
+<tr>
+<td valign="top">
+
+<table>
+<thead>
+<tr>
+<th align="left">Strategy</th>
+<th align="right">Mean guesses</th>
+<th align="right">Wall time (s)</th>
+<th align="right">Solve rate</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>Full entropy</td><td align="right">4.11</td><td align="right">25.7</td><td align="right">100%</td></tr>
+<tr><td>Fixed + entropy</td><td align="right">4.11</td><td align="right">6.6</td><td align="right">100%</td></tr>
+<tr><td>Entropy + threshold Bellman (20)</td><td align="right"><strong>3.95</strong></td><td align="right"><strong>1589</strong></td><td align="right">100%</td></tr>
+<tr><td>Entropy + hard Bellman (20)</td><td align="right">4.00</td><td align="right">22.6</td><td align="right">100%</td></tr>
+<tr><td>Entropy + hard Bellman (50)</td><td align="right">4.09</td><td align="right">24.2</td><td align="right">100%</td></tr>
+<tr><td>Entropy + hard Bellman (100)</td><td align="right">4.08</td><td align="right">42.7</td><td align="right">100%</td></tr>
+</tbody>
+</table>
+
+</td>
+<td valign="top" style="padding-left: 1.25em;">
+
+<table>
+<thead>
+<tr><th align="center">Opening word</th></tr>
+</thead>
+<tbody>
+<tr><td align="center"><code>cario</code></td></tr>
+<tr><td align="center"><code>acero</code> (fixed)</td></tr>
+<tr><td align="center"><code>cario</code></td></tr>
+<tr><td align="center"><code>cario</code></td></tr>
+<tr><td align="center"><code>cario</code></td></tr>
+<tr><td align="center"><code>cario</code></td></tr>
+</tbody>
+</table>
+
+</td>
+</tr>
+</table>
 
 **Takeaways**
 

@@ -1,1 +1,1 @@
-{"root":["./src/app.tsx","./src/main.tsx","./src/types.ts","./src/api/client.ts","./src/components/board.tsx"],"errors":true,"version":"5.7.3"}
+{"root":["./src/app.tsx","./src/main.tsx","./src/types.ts","./src/vite-env.d.ts","./src/api/client.ts","./src/components/board.tsx","./src/components/explorescreen.tsx","./src/components/menuscreen.tsx","./src/components/playscreen.tsx","./src/components/screenlayout.tsx","./src/components/strategyselector.tsx"],"version":"5.7.3"}
