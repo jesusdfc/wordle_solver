@@ -59,18 +59,14 @@ export function ScreenLayout({ title, subtitle, badge, onBack, children }: Scree
             <GitHubIcon />
           </a>
 
-          <div className="site-footer-credit">
-            <span className="site-footer-label">Hecho por:</span>
-            <span className="site-footer-name">Jesús de la Fuente Cedeño</span>
-            <a
-              className="site-footer-site"
-              href={PERSONAL_SITE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              jesusdfc.github.io
-            </a>
-          </div>
+          <a
+            className="site-footer-site"
+            href={PERSONAL_SITE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            jesusdfc.github.io
+          </a>
         </footer>
       </div>
     </main>

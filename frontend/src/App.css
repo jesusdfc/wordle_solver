@@ -583,25 +583,6 @@ body {
   flex-shrink: 0;
 }
 
-.site-footer-credit {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.15rem;
-  text-align: right;
-}
-
-.site-footer-label {
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-
-.site-footer-name {
-  color: var(--text);
-  font-weight: 600;
-}
-
 .site-footer-site {
   color: var(--text-muted);
   text-decoration: none;
