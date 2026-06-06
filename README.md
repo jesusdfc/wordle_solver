@@ -1,4 +1,4 @@
-# Palabra Solver
+# Spanish Wordle Solver
 
 Optimal entropy-based solver for **La Palabra del Día** (Spanish Wordle). Given past guesses and feedback, it picks the next guess that **maximizes expected information** about the hidden word.
 
