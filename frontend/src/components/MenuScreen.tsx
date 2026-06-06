@@ -8,7 +8,7 @@ type MenuScreenProps = {
 export function MenuScreen({ onPlay, onBenchmark }: MenuScreenProps) {
   return (
     <ScreenLayout
-      title="Palabra Solver"
+      title="Spanish Wordle Solver"
       subtitle={
         <>
           Asistente óptimo para <strong>La Palabra del Día</strong>. Elige un modo para empezar.
